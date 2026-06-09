@@ -32,8 +32,9 @@ export default function Kiosk() {
           Welcome to Saveur
         </div>
 
-        <h1 className="font-serif text-[clamp(2.2rem,5vw,3.5rem)] text-white leading-none">
-          Join the <em className="italic">waitlist</em>
+        <h1 className="font-serif text-6xl text-white leading-none">
+          Join the <br />
+          <em className="italic">waitlist</em>
         </h1>
 
         <p className="text-white/75 mt-3 text-base font-light">
@@ -41,8 +42,22 @@ export default function Kiosk() {
         </p>
       </div>
 
+      <div className="bg-brand-dark flex gap-8 items-center justify-center text-wrap px-2 py-2">
+        <div className="flex items-center gap-2 text-white text-xs">
+          Now serving: <span className="font-semibold">—</span>
+        </div>
+        <div className="w-px h-2 bg-white"></div>
+        <div className="flex items-center gap-2 text-white text-xs">
+          Waiting: <span className="font-semibold">0</span>
+        </div>
+        <div className="w-px h-2 bg-white"></div>
+        <div className="flex items-center gap-2 text-white text-xs">
+          Est. wait: <span className="font-semibold">—</span>
+        </div>
+      </div>
+
       {/* PARTY SIZE */}
-      <div className="max-w-[900px] mx-auto py-10 px-6">
+      <div className="max-w-3xl mx-auto py-10 px-6">
         <div className="font-serif text-2xl text-text mb-5">
           Party <span className="text-brand italic">size</span>
         </div>
@@ -52,7 +67,7 @@ export default function Kiosk() {
             <button
               key={i}
               onClick={() => setPartySize(i === 6 ? 7 : (p as number))}
-              className={`flex-1 min-w-[70px] max-w-[100px] aspect-square rounded-2xl border-2 bg-white flex flex-col items-center justify-center transition-all
+              className={`flex-1 min-w-[70px] max-w-[100px] aspect-square rounded-2xl border-2 bg-white flex flex-col items-center justify-center transition-all cursor-pointer
               ${
                 partySize === (i === 6 ? 7 : p)
                   ? "border-brand bg-brand-light"
@@ -113,11 +128,16 @@ export default function Kiosk() {
           <button
             onClick={joinQueue}
             disabled={!name || !partySize || !section}
-            className="bg-brand text-white rounded-xl py-3 px-7 disabled:opacity-40"
+            className="bg-brand text-white rounded-xl py-3 px-7 disabled:opacity-40 cursor-pointer"
           >
             Get Ticket →
           </button>
         </div>
+
+        <p className="text-xs text-text-muted text-center mt-[-1rem]">
+          By joining, you agree to our table allocation policy. Ticket expires
+          after 5 minutes of calling.
+        </p>
       </div>
     </div>
   );

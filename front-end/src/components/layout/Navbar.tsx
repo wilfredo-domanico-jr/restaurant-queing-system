@@ -9,17 +9,20 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   const baseClass =
-    "nav-tab px-4 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all duration-150 whitespace-nowrap";
+    "px-3 py-1.5 rounded-lg text-[13px] font-medium cursor-pointer transition-all duration-150 whitespace-nowrap";
 
   const activeClass = "bg-brand-light text-brand";
   const inactiveClass = "text-text-muted hover:bg-[#F5EDE8] hover:text-brand";
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
-      <div className="max-w-[1280px] mx-auto flex items-center px-6 h-14">
+      <div className="max-w-5xl mx-auto flex items-center px-6 h-11">
         {/* Logo */}
-        <a className="mr-auto flex items-center gap-2.5" href="/">
-          <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
+        <a
+          className="mr-auto flex items-center gap-2.5 cursor-pointer"
+          onClick={() => router.push("/")}
+        >
+          <div className="w-7 h-7 bg-brand rounded-lg flex items-center justify-center">
             <svg
               className="w-4 h-4 fill-none stroke-white stroke-2"
               strokeLinecap="round"
@@ -30,7 +33,7 @@ export default function Navbar() {
           </div>
 
           <div>
-            <div className="font-serif text-2xl text-text tracking-tight">
+            <div className="font-serif text-lg text-text tracking-tight">
               QUÉ
             </div>
             <div className="text-[10px] text-text-muted font-medium tracking-[2px] uppercase -mt-1">
