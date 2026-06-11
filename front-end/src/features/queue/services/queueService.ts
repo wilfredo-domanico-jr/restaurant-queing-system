@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/apiClient";
+import { apiClient } from "@/src/lib/apiClient";
 import { CreateTicketDto, CreateTicketResponse } from "../types/queue.types";
 
 // CREATE TICKET

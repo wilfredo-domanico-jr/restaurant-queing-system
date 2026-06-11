@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/apiClient";
+import { apiClient } from "@/src/lib/apiClient";
 import { TodayStatsResponse } from "../types/today-stats.types";
 
 // FETCH TODAY'S STATS
