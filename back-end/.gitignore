@@ -45,6 +45,10 @@ ScaffoldingReadMe.txt
 appsettings.json
 appsettings.*.json
 
+
+# BUT keep the example file
+!appsettings.example.json
+
 # Test Results
 
 TestResults/
