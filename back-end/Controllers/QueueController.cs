@@ -33,5 +33,26 @@ namespace back_end.Controllers
                 data = result
             });
         }
+
+
+        [HttpPost("live")]
+        public async Task<IActionResult> Live([FromBody] CreateTicketDto ticket)
+        {
+            var result = await _queueService.CreateTicketAsync(ticket);
+
+            // {
+            //   "nowServing": null,
+            //   "waitingCount": 0,
+            //   "upNext": [],
+            //   "ticketsIssued": 0
+            // }
+
+            return Ok(new
+            {
+                message = "Ticket created successfully",
+                data = result
+            });
+        }
+
     }
 }

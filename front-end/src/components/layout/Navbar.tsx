@@ -71,12 +71,6 @@ export default function Navbar() {
             ⚙️ Admin
           </button>
         </div>
-
-        {/* Status */}
-        <div className="hidden sm:flex items-center gap-1.5 ml-4 text-xs font-medium text-[#3D8B3D]">
-          <span className="w-1.5 h-1.5 bg-[#3D8B3D] rounded-full animate-pulse"></span>
-          <span>0 waiting</span>
-        </div>
       </div>
     </nav>
   );

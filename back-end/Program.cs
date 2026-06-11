@@ -15,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Services
 builder.Services.AddScoped<IQueueService, QueueService>();
+builder.Services.AddScoped<IStatService, StatService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -60,7 +61,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 
-app.UseRateLimiter();       
+app.UseRateLimiter();
 app.UseMiddleware<ApiKeyMiddleware>();
 app.UseAuthorization();
 
