@@ -11,8 +11,6 @@ export function useFetchTodayStats() {
     try {
       const result = await fetchTodayStats();
 
-      console.log(result.message);
-
       setData(result.data);
       return result.data;
     } catch (error) {
