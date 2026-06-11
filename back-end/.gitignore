@@ -41,11 +41,9 @@ publish/
 
 ScaffoldingReadMe.txt
 
-# Environment files
-
-.env
-.env.*
-appsettings.Development.json
+# Configuration files with secrets
+appsettings.json
+appsettings.*.json
 
 # Test Results
 
