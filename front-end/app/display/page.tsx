@@ -5,11 +5,19 @@ import { useEffect, useState } from "react";
 export default function Display() {
   const [time, setTime] = useState("00:00:00");
 
-  // simple clock (optional)
+  // Clock
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      setTime(now.toLocaleTimeString());
+
+      setTime(
+        now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        }),
+      );
     }, 1000);
 
     return () => clearInterval(interval);
