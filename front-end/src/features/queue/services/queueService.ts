@@ -1,24 +1,5 @@
 import { apiClient } from "@/lib/apiClient";
-
-// DTO type
-export interface CreateTicketDto {
-  partySize: number;
-  section: string;
-  guestName: string;
-}
-
-// Response
-export interface CreateTicketResponse {
-  message: string;
-  data: {
-    ticketNumber: string;
-    guestName: string;
-    partySize: number;
-    section: string;
-    positionInQueue: number;
-    estimatedWaitMinutes: number;
-  };
-}
+import { CreateTicketDto, CreateTicketResponse } from "../types/queue.types";
 
 // CREATE TICKET
 export const createTicket = async (
@@ -29,8 +10,3 @@ export const createTicket = async (
     body: JSON.stringify(data),
   });
 };
-
-// GET ALL TICKETS
-// export const getTickets = async () => {
-//   return apiClient("queue/tickets");
-// };

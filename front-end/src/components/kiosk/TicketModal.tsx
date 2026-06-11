@@ -2,21 +2,21 @@
 
 type TicketModalProps = {
   ticketNumber: string;
-  name: string;
+  guestName: string;
   partySize: number;
   section: string;
-  position: number;
-  waitTime: number;
+  positionInQueue: number;
+  estimatedWaitMinutes: number;
   onClose: () => void;
 };
 
 export default function TicketModal({
   ticketNumber,
-  name,
+  guestName,
   partySize,
   section,
-  position,
-  waitTime,
+  positionInQueue,
+  estimatedWaitMinutes,
   onClose,
 }: TicketModalProps) {
   return (
@@ -38,7 +38,7 @@ export default function TicketModal({
           {/* WAIT */}
           <div className="text-center my-5 bg-brand-light rounded-xl p-4">
             <div className="font-serif text-[2.5rem] text-brand">
-              {waitTime}
+              {estimatedWaitMinutes}
             </div>
             <div className="text-[13px] text-brand font-medium">
               estimated wait (minutes)
@@ -49,7 +49,7 @@ export default function TicketModal({
           <div className="space-y-3">
             <div className="flex justify-between border-b pb-2 border-border">
               <span className="text-[13px] text-gray-500">Guest name</span>
-              <span className="text-[13px] font-semibold">{name}</span>
+              <span className="text-[13px] font-semibold">{guestName}</span>
             </div>
 
             <div className="flex justify-between border-b pb-2 border-border">
@@ -67,7 +67,7 @@ export default function TicketModal({
             <div className="flex justify-between pb-2 border-border">
               <span className="text-[13px] text-gray-500">Position</span>
               <span className="text-[13px] font-semibold">
-                #{position} in queue
+                #{positionInQueue} in queue
               </span>
             </div>
           </div>

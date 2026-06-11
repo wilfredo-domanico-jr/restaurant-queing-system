@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { createTicket } from "@/src/features/queue/services/queueService";
-
-type TicketResponse = {
-  ticketNumber: string;
-  guestName: string;
-  partySize: number;
-  section: string;
-  positionInQueue: number;
-  estimatedWaitMinutes: number;
-};
+import { CreateTicketResponse } from "../types/queue.types";
 
 export function useCreateTicket() {
   const [loading, setLoading] = useState(false);
@@ -22,7 +14,8 @@ export function useCreateTicket() {
 
     try {
       const result = await createTicket(payload);
-      return result.data as TicketResponse;
+      console.log("Create Ticket Response", result);
+      return result as CreateTicketResponse;
     } finally {
       setLoading(false);
     }

@@ -1,18 +1,10 @@
 import { useState } from "react";
-
-type TicketData = {
-  ticketNumber: string;
-  name: string;
-  partySize: number;
-  section: string;
-  position: number;
-  waitTime: number;
-};
+import { CreateTicketData } from "../types/queue.types";
 
 export function useTicketModal() {
-  const [ticketData, setTicketData] = useState<TicketData | null>(null);
+  const [ticketData, setTicketData] = useState<CreateTicketData | null>(null);
 
-  const open = (data: TicketData) => setTicketData(data);
+  const open = (data: CreateTicketData) => setTicketData(data);
   const close = () => setTicketData(null);
 
   return {

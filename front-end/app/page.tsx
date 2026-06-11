@@ -16,19 +16,19 @@ export default function Kiosk() {
   const modal = useTicketModal();
 
   const handleCreate = async () => {
-    const data = await ticketApi.create({
+    const result = await ticketApi.create({
       partySize: form.partySize,
       section: form.section,
       guestName: form.name,
     });
 
     modal.open({
-      ticketNumber: data.ticketNumber,
-      name: data.guestName,
-      partySize: data.partySize,
-      section: data.section,
-      position: data.positionInQueue,
-      waitTime: data.estimatedWaitMinutes,
+      ticketNumber: result.data.ticketNumber,
+      guestName: result.data.guestName,
+      partySize: result.data.partySize,
+      section: result.data.section,
+      positionInQueue: result.data.positionInQueue,
+      estimatedWaitMinutes: result.data.estimatedWaitMinutes,
     });
   };
 
@@ -67,11 +67,11 @@ export default function Kiosk() {
       {modal.ticketData && (
         <TicketModal
           ticketNumber={modal.ticketData.ticketNumber}
-          name={modal.ticketData.name}
+          guestName={modal.ticketData.guestName}
           partySize={modal.ticketData.partySize}
           section={modal.ticketData.section}
-          position={modal.ticketData.position}
-          waitTime={modal.ticketData.waitTime}
+          positionInQueue={modal.ticketData.positionInQueue}
+          estimatedWaitMinutes={modal.ticketData.estimatedWaitMinutes}
           onClose={modal.close}
         />
       )}
