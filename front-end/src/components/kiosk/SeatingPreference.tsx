@@ -1,8 +1,8 @@
 "use client";
 
 type SeatingPreferenceProps = {
-  section: string | null;
-  setSection: React.Dispatch<React.SetStateAction<string | null>>;
+  section: string;
+  setSection: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function SeatingPreference({

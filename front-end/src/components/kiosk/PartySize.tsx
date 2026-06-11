@@ -1,8 +1,8 @@
 "use client";
 
 type PartySizeProps = {
-  partySize: number | null;
-  setPartySize: React.Dispatch<React.SetStateAction<number | null>>;
+  partySize: number;
+  setPartySize: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function PartySize({ partySize, setPartySize }: PartySizeProps) {

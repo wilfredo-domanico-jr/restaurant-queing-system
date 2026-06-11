@@ -20,6 +20,21 @@ builder.Services.AddScoped<IQueueService, QueueService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+// For CORS in here i set the allowed url to acess the api - in this case its the frontend http://localhost:3000 which i put in appsettings
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins(allowedOrigins!)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Rate Limiting
 builder.Services.AddRateLimiter(options =>
 {
@@ -43,6 +58,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowFrontend");
 
 app.UseRateLimiter();       
 app.UseMiddleware<ApiKeyMiddleware>();

@@ -5,7 +5,8 @@ type JoinQueueFormProps = {
   partySize: number | null;
   section: string | null;
   setName: React.Dispatch<React.SetStateAction<string>>;
-  joinQueue: () => void;
+  handleCreate: () => void;
+  loading: boolean;
 };
 
 export default function JoinQueueForm({
@@ -13,7 +14,8 @@ export default function JoinQueueForm({
   partySize,
   section,
   setName,
-  joinQueue,
+  handleCreate,
+  loading,
 }: JoinQueueFormProps) {
   return (
     <>
@@ -30,11 +32,18 @@ export default function JoinQueueForm({
         />
 
         <button
-          onClick={joinQueue}
-          disabled={!name || !partySize || !section}
-          className="bg-brand text-white rounded-xl py-3 px-7 disabled:opacity-40 cursor-pointer"
+          onClick={handleCreate}
+          disabled={!name || !partySize || !section || loading}
+          className="bg-brand text-white rounded-xl py-3 px-7 disabled:opacity-40 cursor-pointer flex items-center justify-center gap-2"
         >
-          Get Ticket →
+          {loading ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              Creating...
+            </>
+          ) : (
+            "Get Ticket →"
+          )}
         </button>
       </div>
     </>

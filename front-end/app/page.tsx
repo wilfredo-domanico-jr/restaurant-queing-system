@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { createTicket } from "@/services/queueService";
 import Hero from "@/src/components/kiosk/Hero";
 import PartySize from "@/src/components/kiosk/PartySize";
 import SeatingPreference from "@/src/components/kiosk/SeatingPreference";
 import JoinQueueForm from "@/src/components/kiosk/JoinQueueForm";
 import TicketModal from "@/src/components/kiosk/TicketModal";
 export default function Kiosk() {
-  const [partySize, setPartySize] = useState<number | null>(null);
-  const [section, setSection] = useState<string | null>(null);
+  const [partySize, setPartySize] = useState<number>(1);
+  const [section, setSection] = useState("");
   const [name, setName] = useState("");
   const [ticketData, setTicketData] = useState<null | {
     ticketNumber: string;
@@ -19,16 +20,33 @@ export default function Kiosk() {
     waitTime: number;
   }>(null);
 
-  function joinQueue() {
-    setTicketData({
-      ticketNumber: `A${Math.floor(Math.random() * 900 + 100)}`,
-      name,
-      partySize: partySize!,
-      section: section!,
-      position: 1,
-      waitTime: 10,
-    });
-  }
+  const [loading, setLoading] = useState(false);
+
+  const handleCreate = async () => {
+    setLoading(true);
+
+    try {
+      const result = await createTicket({
+        partySize: partySize,
+        section: section,
+        guestName: name,
+      });
+
+      const data = result.data;
+      setTicketData({
+        ticketNumber: data.ticketNumber,
+        name: data.guestName,
+        partySize: data.partySize,
+        section: data.section,
+        position: data.positionInQueue,
+        waitTime: data.estimatedWaitMinutes,
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -44,8 +62,9 @@ export default function Kiosk() {
             name={name}
             partySize={partySize}
             section={section}
-            joinQueue={joinQueue}
+            handleCreate={handleCreate}
             setName={setName}
+            loading={loading}
           />
 
           <p className="text-xs text-text-muted text-center mt-[-1rem]">
