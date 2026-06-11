@@ -6,9 +6,9 @@ import SeatingPreference from "@/src/components/kiosk/SeatingPreference";
 import JoinQueueForm from "@/src/components/kiosk/JoinQueueForm";
 import TicketModal from "@/src/components/kiosk/TicketModal";
 
-import { useQueueForm } from "@/src/features/queue/hooks/useQueueFrom";
-import { useCreateTicket } from "@/src/features/queue/hooks/useCreateTicket";
-import { useTicketModal } from "@/src/features/queue/hooks/useTicketModal";
+import { useQueueForm } from "@/src/features/kiosk/hooks/useQueueFrom";
+import { useCreateTicket } from "@/src/features/kiosk/hooks/useCreateTicket";
+import { useTicketModal } from "@/src/features/kiosk/hooks/useTicketModal";
 
 export default function Kiosk() {
   const form = useQueueForm();

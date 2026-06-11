@@ -78,5 +78,60 @@ namespace back_end.Services
                 IssuedTicket = issued,
             };
         }
+
+        public async Task<SectionStatusResponseDto> GetSectionStatusAsync()
+        {
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
+
+            // ============ START INDOOR COUNT ================= //
+            int indoor = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Waiting" &&
+                t.Section == "Indoor" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow)
+            .CountAsync();
+            // ============ END INDOOR COUNT ================= //
+
+            // ============ START OUTDOOR COUNT ================= //
+            int outdoor = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Waiting" &&
+                t.Section == "Outdoor" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow)
+            .CountAsync();
+            // ============ END OUTDOOR COUNT ================= //
+
+            // ============ START BAR COUNT ================= //
+            int bar = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Waiting" &&
+                t.Section == "Bar" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow)
+            .CountAsync();
+            // ============ END BAR COUNT ================= //
+
+            // ============ START VIP COUNT ================= //
+            int vip = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Waiting" &&
+                t.Section == "VIP" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow)
+            .CountAsync();
+            // ============ END VIP COUNT ================= //
+
+            return new SectionStatusResponseDto
+            {
+                Indoor = indoor,
+                Outdoor = outdoor,
+                Bar = bar,
+                VIP = vip,
+            };
+        }
+
     }
 }

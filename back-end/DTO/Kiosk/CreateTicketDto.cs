@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace back_end.DTO.Queue
+namespace back_end.DTO.Kiosk
 {
     public class CreateTicketDto
     {

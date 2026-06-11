@@ -1,15 +1,15 @@
 ﻿using back_end.Data;
-using back_end.DTO.Queue;
+using back_end.DTO.Kiosk;
 using back_end.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
 {
-    public class QueueService : IQueueService
+    public class KioskService : IKioskService
     {
         private readonly AppDbContext _context;
 
-        public QueueService(AppDbContext context)
+        public KioskService(AppDbContext context)
         {
             _context = context;
         }

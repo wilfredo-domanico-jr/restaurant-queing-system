@@ -1,5 +1,4 @@
-using back_end.DTO.Queue;
-using back_end.Models;
+
 using back_end.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -7,21 +6,21 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace back_end.Controllers
 {
     [ApiController]
-    [Route("api/stats")]
+    [Route("api/display")]
     [EnableRateLimiting("fixed")]
-    public class StatsController : ControllerBase
+    public class DisplayController : ControllerBase
     {
 
         private readonly IStatService _statService;
-        private readonly ILogger<StatsController> _logger;
+        private readonly ILogger<DisplayController> _logger;
 
-        public StatsController(IStatService statService, ILogger<StatsController> logger)
+        public DisplayController(IStatService statService, ILogger<DisplayController> logger)
         {
             _statService = statService;
             _logger = logger;
         }
 
-        [HttpGet("today")]
+        [HttpGet("stats-today")]
         public async Task<IActionResult> GetTodayStats()
         {
             var result = await _statService.GetTodayStatsAsync();
@@ -29,6 +28,18 @@ namespace back_end.Controllers
             return Ok(new
             {
                 message = "Today's stats retrieved successfully",
+                data = result
+            });
+        }
+
+        [HttpGet("sections-status")]
+        public async Task<IActionResult> GetSectionStatus()
+        {
+            var result = await _statService.GetSectionStatusAsync();
+
+            return Ok(new
+            {
+                message = "Section status retrieved successfully",
                 data = result
             });
         }

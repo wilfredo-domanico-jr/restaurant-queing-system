@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreateTicketData } from "../types/queue.types";
+import { CreateTicketData } from "../types/kiosk.types";
 
 export function useTicketModal() {
   const [ticketData, setTicketData] = useState<CreateTicketData | null>(null);

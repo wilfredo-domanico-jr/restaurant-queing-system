@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Services
-builder.Services.AddScoped<IQueueService, QueueService>();
+builder.Services.AddScoped<IKioskService, KioskService>();
 builder.Services.AddScoped<IStatService, StatService>();
 
 // Swagger

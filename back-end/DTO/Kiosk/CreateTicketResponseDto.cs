@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace back_end.DTO.Queue
+﻿
+namespace back_end.DTO.Kiosk
 {
     public class CreateTicketResponseDto
     {
-       
+
         public required string TicketNumber { get; set; }
 
         public int EstimatedWaitMinutes { get; set; }

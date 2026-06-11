@@ -1,9 +1,9 @@
-﻿using back_end.DTO.Queue;
+﻿using back_end.DTO.Kiosk;
 
 
 namespace back_end.Services
 {
-    public interface IQueueService
+    public interface IKioskService
     {
         Task<CreateTicketResponseDto> CreateTicketAsync(CreateTicketDto order);
     }

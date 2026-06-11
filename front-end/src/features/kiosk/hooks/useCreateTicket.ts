@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { createTicket } from "@/src/features/queue/services/queueService";
-import { CreateTicketResponse } from "../types/queue.types";
+import { createTicket } from "@/src/features/kiosk/services/queueService";
+import { CreateTicketResponse } from "../types/kiosk.types";
 
 export function useCreateTicket() {
   const [loading, setLoading] = useState(false);

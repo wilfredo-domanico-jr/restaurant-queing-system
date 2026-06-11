@@ -3,7 +3,7 @@ import { TodayStatsResponse } from "../types/today-stats.types";
 
 // FETCH TODAY'S STATS
 export const fetchTodayStats = async (): Promise<TodayStatsResponse> => {
-  return apiClient<TodayStatsResponse>("/stats/today", {
+  return apiClient<TodayStatsResponse>("/display/stats-today", {
     method: "GET",
   });
 };
