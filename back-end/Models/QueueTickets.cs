@@ -6,15 +6,15 @@ namespace back_end.Models
     {
         public int Id { get; set; } 
 
-        public string TicketNumber { get; set; }
+        public required string TicketNumber { get; set; }
 
-        public string GuestName { get; set; }
+        public required string GuestName { get; set; }
 
         public int PartySize { get; set; }
 
-        public string Section { get; set; }
+        public required string Section { get; set; }
 
-        public string Status { get; set; }
+        public required string Status { get; set; }
 
         public DateTime JoinedAt { get; set; }
 

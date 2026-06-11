@@ -55,7 +55,7 @@ namespace back_end.Services
             if (completedTickets.Any())
             {
                 averageWaitMinutes = completedTickets
-                    .Select(t => (t.SeatedAt.Value - t.JoinedAt).TotalMinutes)
+                    .Select(t => (t.SeatedAt!.Value - t.JoinedAt).TotalMinutes)
                     .Average();
             }
             // ============ END COUNT AVERAGE WAITING TIME ================= //

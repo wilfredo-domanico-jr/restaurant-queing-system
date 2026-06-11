@@ -1,51 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { createTicket } from "@/services/queueService";
 import Hero from "@/src/components/kiosk/Hero";
 import PartySize from "@/src/components/kiosk/PartySize";
 import SeatingPreference from "@/src/components/kiosk/SeatingPreference";
 import JoinQueueForm from "@/src/components/kiosk/JoinQueueForm";
 import TicketModal from "@/src/components/kiosk/TicketModal";
-export default function Kiosk() {
-  const [partySize, setPartySize] = useState<number>(1);
-  const [section, setSection] = useState("");
-  const [name, setName] = useState("");
-  const [ticketData, setTicketData] = useState<null | {
-    ticketNumber: string;
-    name: string;
-    partySize: number;
-    section: string;
-    position: number;
-    waitTime: number;
-  }>(null);
 
-  const [loading, setLoading] = useState(false);
+import { useQueueForm } from "@/src/features/queue/hooks/useQueueFrom";
+import { useCreateTicket } from "@/src/features/queue/hooks/useCreateTicket";
+import { useTicketModal } from "@/src/features/queue/hooks/useTicketModal";
+
+export default function Kiosk() {
+  const form = useQueueForm();
+  const ticketApi = useCreateTicket();
+  const modal = useTicketModal();
 
   const handleCreate = async () => {
-    setLoading(true);
+    const data = await ticketApi.create({
+      partySize: form.partySize,
+      section: form.section,
+      guestName: form.name,
+    });
 
-    try {
-      const result = await createTicket({
-        partySize: partySize,
-        section: section,
-        guestName: name,
-      });
-
-      const data = result.data;
-      setTicketData({
-        ticketNumber: data.ticketNumber,
-        name: data.guestName,
-        partySize: data.partySize,
-        section: data.section,
-        position: data.positionInQueue,
-        waitTime: data.estimatedWaitMinutes,
-      });
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+    modal.open({
+      ticketNumber: data.ticketNumber,
+      name: data.guestName,
+      partySize: data.partySize,
+      section: data.section,
+      position: data.positionInQueue,
+      waitTime: data.estimatedWaitMinutes,
+    });
   };
 
   return (
@@ -54,17 +38,23 @@ export default function Kiosk() {
         <Hero />
 
         <div className="max-w-3xl mx-auto py-10 px-6">
-          <PartySize partySize={partySize} setPartySize={setPartySize} />
+          <PartySize
+            partySize={form.partySize}
+            setPartySize={form.setPartySize}
+          />
 
-          <SeatingPreference section={section} setSection={setSection} />
+          <SeatingPreference
+            section={form.section}
+            setSection={form.setSection}
+          />
 
           <JoinQueueForm
-            name={name}
-            partySize={partySize}
-            section={section}
+            name={form.name}
+            partySize={form.partySize}
+            section={form.section}
+            setName={form.setName}
             handleCreate={handleCreate}
-            setName={setName}
-            loading={loading}
+            loading={ticketApi.loading}
           />
 
           <p className="text-xs text-text-muted text-center mt-[-1rem]">
@@ -73,15 +63,16 @@ export default function Kiosk() {
           </p>
         </div>
       </div>
-      {ticketData && (
+
+      {modal.ticketData && (
         <TicketModal
-          ticketNumber={ticketData.ticketNumber}
-          name={ticketData.name}
-          partySize={ticketData.partySize}
-          section={ticketData.section}
-          position={ticketData.position}
-          waitTime={ticketData.waitTime}
-          onClose={() => setTicketData(null)}
+          ticketNumber={modal.ticketData.ticketNumber}
+          name={modal.ticketData.name}
+          partySize={modal.ticketData.partySize}
+          section={modal.ticketData.section}
+          position={modal.ticketData.position}
+          waitTime={modal.ticketData.waitTime}
+          onClose={modal.close}
         />
       )}
     </>

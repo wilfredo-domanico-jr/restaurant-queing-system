@@ -9,11 +9,11 @@ namespace back_end.DTO.Queue
 
         [Required]
         [MaxLength(10)]
-        public string Section { get; set; }
+        public required string Section { get; set; }
 
         [Required]
         [MaxLength(100)]
-        public string GuestName { get; set; }
+        public required string GuestName { get; set; }
 
     }
 }
