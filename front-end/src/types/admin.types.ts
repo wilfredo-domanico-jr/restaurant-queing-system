@@ -25,5 +25,11 @@ export interface CurrentQueueItem {
 // Response
 export interface CurrentQueueResponse {
   message: string;
-  data: CurrentQueueItem[];
+  data: {
+    items: CurrentQueueItem[];
+    page: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
+  };
 }

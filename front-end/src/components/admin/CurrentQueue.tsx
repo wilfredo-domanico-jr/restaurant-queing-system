@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import type { CurrentQueueResponse } from "@/src/types/admin.types";
 import CurrentQueueTable from "./CurrentQueueTable";
@@ -8,15 +10,27 @@ type CurrentQueueProps = {
 };
 
 export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
+  const [page, setPage] = useState(1);
+
   const { data: currentQueue, load: loadCurrentQueue } =
-    useFetch<CurrentQueueResponse>("/admin/current-queue");
+    useFetch<CurrentQueueResponse>(`/admin/current-queue?page=${page}`);
 
   useEffect(() => {
     loadCurrentQueue();
-  }, [loadCurrentQueue]);
+  }, [loadCurrentQueue, page]);
 
-  const queueData = currentQueue?.data ?? [];
+  const queueData = currentQueue?.data.items ?? [];
+  const totalPages = currentQueue?.data.totalPages ?? 1;
+
   const hasGuests = queueData.length > 0;
+
+  const startPage = Math.max(1, page - 1);
+  const endPage = Math.min(totalPages, startPage + 2);
+
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
 
   return (
     <div className="col-span-4">
@@ -32,7 +46,48 @@ export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
 
         {/* BODY */}
         {hasGuests ? (
-          <CurrentQueueTable queueData={queueData} />
+          <>
+            <CurrentQueueTable queueData={queueData} />
+
+            {/* PAGINATION */}
+            <div className="flex justify-end items-center gap-2 p-4 border-t border-border">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="h-6 w-6 flex items-center justify-center rounded border border-border text-xs
+                  disabled:opacity-40 hover:bg-gray-100"
+              >
+                ←
+              </button>
+
+              {pages.map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => setPage(pageNumber)}
+                  className={`h-6 w-6 rounded text-xs font-medium transition
+                    border border-border cursor-pointer
+                    hover:bg-brand-mid hover:border-brand-dark hover:text-white
+                    ${
+                      page === pageNumber
+                        ? "bg-brand text-white border-brand"
+                        : ""
+                    }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+
+              {/* RIGHT ARROW */}
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="h-6 w-6 flex items-center justify-center rounded border border-border text-xs
+                  disabled:opacity-40 hover:bg-gray-100"
+              >
+                →
+              </button>
+            </div>
+          </>
         ) : (
           <div className="p-12 text-center text-text-muted text-sm">
             <div className="text-4xl mb-2">🎉</div>
