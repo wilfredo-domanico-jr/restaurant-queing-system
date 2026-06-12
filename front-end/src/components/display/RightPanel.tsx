@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useFetch } from "@/src/features/display/hooks/useFetch";
+import { useFetch } from "@/src/hooks/useFetch";
 import type {
   TodayStatsResponse,
   SectionStatusResponse,

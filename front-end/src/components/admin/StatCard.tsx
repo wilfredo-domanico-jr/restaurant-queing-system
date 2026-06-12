@@ -2,7 +2,7 @@
 
 type StatCardProps = {
   label: string;
-  value: string;
+  value: number;
   sub: string;
   highlight?: boolean;
 };
@@ -12,7 +12,6 @@ export default function StatsCard({
   sub,
   highlight = false,
 }: StatCardProps) {
-  
   return (
     <div className="bg-white border border-border rounded-xl p-4 px-5">
       <div className="text-[11px] text-text-muted font-semibold uppercase tracking-wider mb-1.5">
