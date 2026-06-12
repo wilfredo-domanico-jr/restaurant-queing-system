@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Services
 builder.Services.AddScoped<IKioskService, KioskService>();
 builder.Services.AddScoped<IDisplayService, DisplayService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
