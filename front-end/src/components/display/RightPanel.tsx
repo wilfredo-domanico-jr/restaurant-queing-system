@@ -5,7 +5,7 @@ import { useFetch } from "@/src/hooks/useFetch";
 import type {
   TodayStatsResponse,
   SectionStatusResponse,
-} from "@/src/features/display/types/display.types";
+} from "@/src/types/display.types";
 import SectionRow from "./SectionRow";
 
 export default function RightPanel() {

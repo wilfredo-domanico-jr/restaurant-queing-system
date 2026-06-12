@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
-import type { TodayStatsResponse } from "@/src/features/admin/types/admin.types";
+import type { TodayStatsResponse } from "@/src/types/admin.types";
 import CurrentQueue from "@/src/components/admin/CurrentQueue";
 import Header from "@/src/components/admin/Header";
 import Sidebar from "@/src/components/admin/Sidebar";

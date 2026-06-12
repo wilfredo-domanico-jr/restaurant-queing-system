@@ -3,6 +3,7 @@ namespace back_end.DTO.Admin
 {
     public class CurrentQueueResponseDto
     {
+        public int Id { get; set; }
         public required string TicketNumber { get; set; }
         public required string GuestName { get; set; }
         public int PartySize { get; set; }

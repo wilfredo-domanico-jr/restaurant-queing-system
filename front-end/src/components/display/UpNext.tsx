@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
-import type { UpNextResponse } from "@/src/features/display/types/display.types";
+import type { UpNextResponse } from "@/src/types/display.types";
 
 export default function UpNext() {
   const { data: upNext, load: loadUpNext } =

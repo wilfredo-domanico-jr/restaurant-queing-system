@@ -102,6 +102,7 @@ namespace back_end.Services
                 t.JoinedAt < tomorrow)
             .Select(t => new CurrentQueueResponseDto
             {
+                Id = t.Id,
                 TicketNumber = t.TicketNumber,
                 GuestName = t.GuestName,
                 PartySize = t.PartySize,

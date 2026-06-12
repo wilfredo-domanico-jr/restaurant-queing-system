@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
-import type { NowServingResponse } from "@/src/features/display/types/display.types";
+import type { NowServingResponse } from "@/src/types/display.types";
 
 export default function NowServing() {
   const { data: nowServing, load: loadNowServing } =
