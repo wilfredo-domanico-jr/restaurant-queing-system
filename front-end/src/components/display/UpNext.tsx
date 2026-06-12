@@ -16,32 +16,37 @@ export default function UpNext() {
 
   return (
     <>
+      {/* LABEL */}
       <div className="text-[11px] font-semibold tracking-[3px] uppercase text-white/40 mt-2">
         Up Next
       </div>
 
-      <div className="grid grid-cols-6 gap-2.5 flex-1 overflow-hidden">
+      {/* GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3 flex-1 overflow-hidden">
         {items.length > 0 ? (
-          items.map((g, i) => (
+          items.map((g) => (
             <div
               key={g.ticketNumber}
-              className="bg-white/5 border border-white/10 rounded-[14px] p-4"
+              className="bg-white/5 border border-white/10 rounded-[14px] p-3 sm:p-4"
             >
-              <div className="font-serif text-2xl text-white leading-none">
+              {/* TICKET */}
+              <div className="font-serif text-xl sm:text-2xl text-white leading-none">
                 {g.ticketNumber}
               </div>
 
-              <div className="text-xs text-white/50 mt-1">
+              {/* NAME */}
+              <div className="text-xs text-white/50 mt-1 truncate">
                 {g.guestName || "Unknown Guest"}
               </div>
 
+              {/* WAIT */}
               <div className="text-[11px] mt-1 font-medium text-brand-mid">
                 ~{g.waitingMinutes ?? 0} min
               </div>
             </div>
           ))
         ) : (
-          <div className="col-span-6 text-xs text-white/30">
+          <div className="col-span-full text-xs text-white/30">
             No upcoming guests
           </div>
         )}

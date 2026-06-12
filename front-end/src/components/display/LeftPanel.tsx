@@ -5,7 +5,7 @@ import UpNext from "./UpNext";
 
 export default function LeftPanel() {
   return (
-    <div className="p-8 flex flex-col gap-6 overflow-hidden">
+    <div className="col-span-4 p-8 flex flex-col gap-6">
       <NowServing />
       <UpNext />
     </div>

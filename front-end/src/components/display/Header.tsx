@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const [time, setTime] = useState("00:00:00");
 
-  // Clock
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
@@ -22,13 +21,16 @@ export default function Header() {
 
     return () => clearInterval(interval);
   }, []);
+
   return (
-    <div className="border-b border-white/10 py-5 px-8 flex items-center justify-between">
-      <div className="font-serif text-2xl text-white">
+    <div className="border-b border-white/10 py-4 sm:py-5 px-4 sm:px-8 flex items-center justify-between">
+      {/* TITLE */}
+      <div className="font-serif text-lg sm:text-xl md:text-2xl text-white leading-none">
         Saveur <em className="text-brand-mid italic">Queue</em>
       </div>
 
-      <div className="text-lg font-light text-white/50 tabular-nums">
+      {/* CLOCK */}
+      <div className="text-sm sm:text-base md:text-lg font-light text-white/50 tabular-nums">
         {time}
       </div>
     </div>

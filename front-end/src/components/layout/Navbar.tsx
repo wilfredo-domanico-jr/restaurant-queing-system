@@ -16,15 +16,16 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
-      <div className="max-w-5xl mx-auto flex items-center px-6 h-11">
+      <div className="max-w-5xl mx-auto flex items-center px-4 sm:px-6 h-12">
         {/* Logo */}
         <a
           className="mr-auto flex items-center gap-2.5 cursor-pointer"
           onClick={() => router.push("/")}
         >
-          <div className="w-7 h-7 bg-brand rounded-lg flex items-center justify-center">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-brand rounded-lg flex items-center justify-center">
             <svg
-              className="w-4 h-4 fill-none stroke-white stroke-2"
+              className="w-4 h-4 stroke-white stroke-2"
+              fill="none"
               strokeLinecap="round"
               viewBox="0 0 24 24"
             >
@@ -32,18 +33,19 @@ export default function Navbar() {
             </svg>
           </div>
 
-          <div>
-            <div className="font-serif text-lg text-text tracking-tight">
+          {/* Hide text on small screens */}
+          <div className="hidden sm:block">
+            <div className="font-serif text-lg text-text tracking-tight leading-none">
               QUÉ
             </div>
-            <div className="text-[10px] text-text-muted font-medium tracking-[2px] uppercase -mt-1">
+            <div className="text-[10px] text-text-muted font-medium tracking-[2px] uppercase -mt-0.5">
               Queue System
             </div>
           </div>
         </a>
 
-        {/* Tabs */}
-        <div className="flex gap-1">
+        {/* Tabs (responsive scroll on mobile) */}
+        <div className="flex gap-1 overflow-x-auto no-scrollbar">
           <button
             onClick={() => router.push("/")}
             className={`${baseClass} ${
