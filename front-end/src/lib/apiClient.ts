@@ -1,5 +1,3 @@
-// lib/apiClient.ts
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function apiClient<T>(

@@ -1,6 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
+import { useFetch } from "@/src/features/display/hooks/useFetch";
+import type { NowServingResponse } from "@/src/features/display/types/display.types";
+
 export default function NowServing() {
+  const { data: nowServing, load: loadNowServing } =
+    useFetch<NowServingResponse>("/display/now-serving");
+
+  useEffect(() => {
+    loadNowServing();
+  }, [loadNowServing]);
+
   return (
     <>
       <div className="text-[11px] font-semibold tracking-[3px] uppercase text-white/40">
