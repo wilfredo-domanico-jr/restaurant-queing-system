@@ -7,5 +7,6 @@ namespace back_end.Services
         Task<TodayStatsResponseDto> GetTodayStatsAsync();
         Task<PaginatedResponseDto<CurrentQueueResponseDto>> GetCurrentQueueAsync(int page);
         Task<bool> DeleteQueueAsync(int id);
+        Task<bool> UpdateQueueStatusAsync(int id, string status);
     }
 }

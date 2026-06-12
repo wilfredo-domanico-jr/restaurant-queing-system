@@ -1,5 +1,6 @@
 
 using back_end.Services;
+using back_end.DTO.Admin;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -63,5 +64,25 @@ namespace back_end.Controllers
             });
         }
 
+        [HttpPatch("update-queue-status")]
+        public async Task<IActionResult> UpdateQueueStatus(
+            [FromQuery] int id,
+            [FromBody] UpdateQueueStatusDto dto)
+        {
+            var result = await _adminService.UpdateQueueStatusAsync(id, dto.Status);
+
+            if (!result)
+            {
+                return NotFound(new
+                {
+                    message = "Queue not found"
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Queue status updated successfully"
+            });
+        }
     }
 }

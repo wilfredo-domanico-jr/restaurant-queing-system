@@ -88,11 +88,11 @@ export default function CurrentQueueTable({
               <td className="px-4 py-3 border-b border-[#F5EDE8]">
                 <div className="flex gap-1.5">
                   {item.status === "Waiting" ? (
-                    <button className="px-2.5 py-1 rounded text-[11px] font-semibold bg-[#DCFCE7] text-[#166534] hover:bg-[#BBF7D0] cursor-pointers">
+                    <button className="cursor-pointer px-2.5 py-1 rounded text-[11px] font-semibold bg-[#DCFCE7] text-[#166534] hover:bg-[#BBF7D0] cursor-pointers">
                       Call
                     </button>
                   ) : item.status === "Called" ? (
-                    <button className="px-2.5 py-1 rounded text-[11px] font-semibold bg-[#E0E7FF] text-[#3730A3] hover:bg-[#C7D2FE] cursor-pointer">
+                    <button className="cursor-pointer px-2.5 py-1 rounded text-[11px] font-semibold bg-[#E0E7FF] text-[#3730A3] hover:bg-[#C7D2FE]">
                       Seat
                     </button>
                   ) : null}

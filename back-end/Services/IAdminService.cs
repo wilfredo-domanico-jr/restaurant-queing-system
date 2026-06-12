@@ -151,5 +151,27 @@ namespace back_end.Services
             return true;
 
         }
+
+        public async Task<bool> UpdateQueueStatusAsync(int id, string status)
+        {
+            var queue = await _context.QueueTickets.FindAsync(id);
+
+            if (queue == null)
+                return false;
+
+            queue.Status = status;
+
+
+            if (status == "Called")
+                queue.CalledAt = DateTime.Now;
+
+            if (status == "Seated")
+                queue.SeatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }
