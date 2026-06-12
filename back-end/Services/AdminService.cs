@@ -5,5 +5,6 @@ namespace back_end.Services
     public interface IAdminService
     {
         Task<TodayStatsResponseDto> GetTodayStatsAsync();
+        Task<List<CurrentQueueResponseDto>> GetCurrentQueueAsync();
     }
 }

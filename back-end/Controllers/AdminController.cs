@@ -31,5 +31,17 @@ namespace back_end.Controllers
                 data = result
             });
         }
+
+        [HttpGet("current-queue")]
+        public async Task<IActionResult> GetCurrentQueue()
+        {
+            var result = await _adminService.GetCurrentQueueAsync();
+
+            return Ok(new
+            {
+                message = "Admin - Current queue retrieved successfully",
+                data = result
+            });
+        }
     }
 }

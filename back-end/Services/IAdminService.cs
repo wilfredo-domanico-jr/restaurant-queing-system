@@ -89,6 +89,32 @@ namespace back_end.Services
             };
         }
 
+        public async Task<List<CurrentQueueResponseDto>> GetCurrentQueueAsync()
+        {
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
 
+            // ============ START CURRENT QUEUE ================= //
+            var data = await _context.QueueTickets
+            .Where(t =>
+                (t.Status == "Waiting" || t.Status == "Called") &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow)
+            .Select(t => new CurrentQueueResponseDto
+            {
+                TicketNumber = t.TicketNumber,
+                GuestName = t.GuestName,
+                PartySize = t.PartySize,
+                Section = t.Section,
+                WaitingMinutes = EF.Functions.DateDiffMinute(t.JoinedAt, DateTime.Now),
+                JoinedAt = t.JoinedAt,
+                Status = t.Status
+            })
+            .ToListAsync();
+            // ============ END WAITING COUNT ================= //
+
+
+            return data;
+        }
     }
 }
