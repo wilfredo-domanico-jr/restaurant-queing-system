@@ -135,5 +135,21 @@ namespace back_end.Services
                 TotalPages = (int)Math.Ceiling((double)totalItems / pageSize)
             };
         }
+
+
+        public async Task<bool> DeleteQueueAsync(int id)
+        {
+            var queue = await _context.QueueTickets
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (queue == null)
+                return false;
+
+            _context.QueueTickets.Remove(queue);
+            await _context.SaveChangesAsync();
+
+            return true;
+
+        }
     }
 }

@@ -16,6 +16,10 @@ export default function Admin() {
     loadTodayStats();
   }, []);
 
+  const refreshTodayStats = async () => {
+    await loadTodayStats();
+  };
+
   const stats = todayStats?.data;
   const totalGuest = (stats?.waiting ?? 0) + (stats?.called ?? 0);
 
@@ -56,7 +60,10 @@ export default function Admin() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-0 px-4 sm:px-6 pb-6">
-        <CurrentQueue totalGuest={totalGuest} />
+        <CurrentQueue
+          totalGuest={totalGuest}
+          refreshTodayStats={refreshTodayStats}
+        />
         <Sidebar />
       </div>
     </div>

@@ -43,5 +43,25 @@ namespace back_end.Controllers
                 data = result
             });
         }
+
+        [HttpDelete("delete-queue")]
+        public async Task<IActionResult> DeleteQueue([FromQuery] int id)
+        {
+            var result = await _adminService.DeleteQueueAsync(id);
+
+            if (!result)
+            {
+                return NotFound(new
+                {
+                    message = "Queue not found"
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Queue deleted successfully"
+            });
+        }
+
     }
 }

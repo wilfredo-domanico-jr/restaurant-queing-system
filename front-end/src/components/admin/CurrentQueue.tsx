@@ -2,18 +2,26 @@
 
 import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
+import { useDelete } from "@/src/hooks/useDelete";
 import type { CurrentQueueResponse } from "@/src/types/admin.types";
 import CurrentQueueTable from "./CurrentQueueTable";
 
 type CurrentQueueProps = {
   totalGuest: number;
+  refreshTodayStats: () => Promise<void>;
 };
 
-export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
+export default function CurrentQueue({
+  totalGuest,
+  refreshTodayStats,
+}: CurrentQueueProps) {
   const [page, setPage] = useState(1);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const { data: currentQueue, load: loadCurrentQueue } =
     useFetch<CurrentQueueResponse>(`/admin/current-queue?page=${page}`);
+
+  const { remove: deleteQueue } = useDelete("/admin/delete-queue");
 
   useEffect(() => {
     loadCurrentQueue();
@@ -21,16 +29,26 @@ export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
 
   const queueData = currentQueue?.data.items ?? [];
   const totalPages = currentQueue?.data.totalPages ?? 1;
-
   const hasGuests = queueData.length > 0;
 
   const startPage = Math.max(1, page - 1);
   const endPage = Math.min(totalPages, startPage + 2);
 
-  const pages = [];
+  const pages: number[] = [];
   for (let i = startPage; i <= endPage; i++) {
     pages.push(i);
   }
+
+  const handleDelete = async (id: number) => {
+    try {
+      setDeletingId(id);
+      await deleteQueue(id);
+      await loadCurrentQueue();
+      await refreshTodayStats();
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className="col-span-4">
@@ -47,7 +65,11 @@ export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
         {/* BODY */}
         {hasGuests ? (
           <>
-            <CurrentQueueTable queueData={queueData} />
+            <CurrentQueueTable
+              queueData={queueData}
+              onDelete={handleDelete}
+              deletingId={deletingId}
+            />
 
             {/* PAGINATION */}
             <div className="flex justify-end items-center gap-2 p-4 border-t border-border">
@@ -55,7 +77,7 @@ export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
                 className="h-6 w-6 flex items-center justify-center rounded border border-border text-xs
-                  disabled:opacity-40 hover:bg-gray-100"
+                cursor-pointer disabled:opacity-40 hover:bg-gray-100 disabled:cursor-not-allowed"
               >
                 ←
               </button>
@@ -77,12 +99,11 @@ export default function CurrentQueue({ totalGuest }: CurrentQueueProps) {
                 </button>
               ))}
 
-              {/* RIGHT ARROW */}
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
                 className="h-6 w-6 flex items-center justify-center rounded border border-border text-xs
-                  disabled:opacity-40 hover:bg-gray-100"
+                cursor-pointer disabled:opacity-40 hover:bg-gray-100 disabled:cursor-not-allowed"
               >
                 →
               </button>
