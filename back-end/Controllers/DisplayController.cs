@@ -43,8 +43,6 @@ namespace back_end.Controllers
                 data = result
             });
         }
-
-
         [HttpGet("now-serving")]
         public async Task<IActionResult> GetNowServing()
         {
@@ -53,6 +51,18 @@ namespace back_end.Controllers
             return Ok(new
             {
                 message = "Now serving retrieved successfully",
+                data = result
+            });
+        }
+
+        [HttpGet("up-next")]
+        public async Task<IActionResult> GetUpNext()
+        {
+            var result = await _displayService.GetUpNextAsync();
+
+            return Ok(new
+            {
+                message = "Up next retrieved successfully",
                 data = result
             });
         }

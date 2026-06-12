@@ -7,5 +7,6 @@ namespace back_end.Services
         Task<TodayStatsResponseDto> GetTodayStatsAsync();
         Task<SectionStatusResponseDto> GetSectionStatusAsync();
         Task<NowServingResponseDto?> GetNowServingAsync();
+        Task<List<UpNextResponseDto>> GetUpNextAsync();
     }
 }

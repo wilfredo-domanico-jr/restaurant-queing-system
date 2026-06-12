@@ -167,5 +167,33 @@ namespace back_end.Services
             };
         }
 
+        public async Task<List<UpNextResponseDto>> GetUpNextAsync()
+        {
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
+            var now = DateTime.Now;
+
+            // ============ START NOW UPNEXT ================= //
+
+            var data = await _context.QueueTickets
+                .Where(t =>
+                    t.Status == "Waiting" &&
+                    t.JoinedAt >= today &&
+                    t.JoinedAt < tomorrow)
+                .OrderBy(t => t.JoinedAt)
+                .Select(t => new UpNextResponseDto
+                {
+                    TicketNumber = t.TicketNumber,
+                    GuestName = t.GuestName,
+                    WaitingMinutes = EF.Functions.DateDiffMinute(t.JoinedAt, now)
+                })
+                .ToListAsync();
+
+            // ============ END NOW UPNEXT ================= //
+
+            return data;
+        }
+
+
     }
 }
