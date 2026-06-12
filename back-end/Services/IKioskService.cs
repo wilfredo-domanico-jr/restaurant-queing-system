@@ -29,10 +29,24 @@ namespace back_end.Services
             };
 
             _context.QueueTickets.Add(ticket);
-            await _context.SaveChangesAsync();
+
+
 
             // ============ END INSERT TICKETS ================= //
 
+            // ============ START ACTIVITY LOGS ================= //
+            var log = new ActivityLogs
+            {
+                Type = "Create",
+                Description = $"{ticket.GuestName} joined ({ticket.TicketNumber}) — {ticket.Section}",
+                CreatedAt = DateTime.Now
+            };
+
+            _context.ActivityLogs.Add(log);
+
+            // ============ END ACTIVITY LOGS ================= //
+
+            await _context.SaveChangesAsync(); // Save here
 
             var today = DateTime.Today;
 

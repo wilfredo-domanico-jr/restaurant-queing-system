@@ -10,5 +10,6 @@ namespace back_end.Data
         }
 
         public DbSet<QueueTickets> QueueTickets { get; set; }
+        public DbSet<ActivityLogs> ActivityLogs { get; set; }
     }
 }

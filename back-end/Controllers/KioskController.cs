@@ -26,7 +26,6 @@ namespace back_end.Controllers
             var result = await _queueService.CreateTicketAsync(ticket);
 
 
-
             return Ok(new
             {
                 message = "Ticket created successfully",
@@ -35,17 +34,6 @@ namespace back_end.Controllers
         }
 
 
-        // [HttpPost("live")]
-        // public async Task<IActionResult> Live([FromBody] CreateTicketDto ticket)
-        // {
-        //     var result = await _queueService.CreateTicketAsync(ticket);
-
-        //     return Ok(new
-        //     {
-        //         message = "Ticket created successfully",
-        //         data = result
-        //     });
-        // }
 
     }
 }

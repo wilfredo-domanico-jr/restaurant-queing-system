@@ -84,5 +84,19 @@ namespace back_end.Controllers
                 message = "Queue status updated successfully"
             });
         }
+
+
+        [HttpGet("activity-logs")]
+        public async Task<IActionResult> GetTodayActivityLog()
+        {
+            var result = await _adminService.GetTodayActivityLogAsync();
+
+            return Ok(new
+            {
+                message = "Admin - Today's activity logs retrieved successfully",
+                data = result
+            });
+        }
+
     }
 }

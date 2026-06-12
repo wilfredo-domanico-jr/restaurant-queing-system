@@ -1,5 +1,6 @@
 ﻿using back_end.Data;
 using back_end.DTO.Admin;
+using back_end.Models;
 using back_end.DTO.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -145,7 +146,22 @@ namespace back_end.Services
             if (queue == null)
                 return false;
 
+
+            // ============ START ACTIVITY LOGS ================= //
+            var log = new ActivityLogs
+            {
+                Type = "Removed",
+                Description = $"Removed: {queue.GuestName}",
+                CreatedAt = DateTime.Now
+            };
+
+            // ============ END ACTIVITY LOGS ================= //
+
             _context.QueueTickets.Remove(queue);
+            _context.ActivityLogs.Add(log);
+
+
+
             await _context.SaveChangesAsync();
 
             return true;
@@ -161,17 +177,59 @@ namespace back_end.Services
 
             queue.Status = status;
 
+            string description = "";
 
             if (status == "Called")
+            {
                 queue.CalledAt = DateTime.Now;
+                description = $"Called {queue.TicketNumber} ({queue.GuestName})";
+            }
+
 
             if (status == "Seated")
+            {
                 queue.SeatedAt = DateTime.Now;
+                description = $"{queue.GuestName} seated";
+            }
+
+            if (status == "No-Show")
+            {
+                description = $"No-show: {queue.GuestName} ({queue.TicketNumber})";
+            }
+
+
+            // ============ START ACTIVITY LOGS ================= //
+            var log = new ActivityLogs
+            {
+                Type = status,
+                Description = description,
+                CreatedAt = DateTime.Now
+            };
+
+            // ============ END ACTIVITY LOGS ================= //
+
+            _context.ActivityLogs.Add(log);
 
             await _context.SaveChangesAsync();
 
             return true;
         }
+
+        public async Task<List<ActivityLogs>> GetTodayActivityLogAsync()
+        {
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
+
+            var logs = await _context.ActivityLogs
+                .Where(l => l.CreatedAt >= today && l.CreatedAt < tomorrow)
+                .OrderByDescending(l => l.CreatedAt)
+                .Take(5)
+                .ToListAsync();
+
+            return logs;
+        }
+
+
 
     }
 }
