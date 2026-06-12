@@ -31,3 +31,16 @@ export interface NowServingResponse {
     section: string;
   };
 }
+
+// Response Item
+interface UpNextItem {
+  ticketNumber: string;
+  guestName: string;
+  waitingMinutes: number;
+}
+
+// Response
+export interface UpNextResponse {
+  message: string;
+  data: UpNextItem[];
+}

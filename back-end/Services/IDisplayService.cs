@@ -180,13 +180,14 @@ namespace back_end.Services
                     t.Status == "Waiting" &&
                     t.JoinedAt >= today &&
                     t.JoinedAt < tomorrow)
-                .OrderBy(t => t.JoinedAt)
+                .OrderBy(t => t.Id)
                 .Select(t => new UpNextResponseDto
                 {
                     TicketNumber = t.TicketNumber,
                     GuestName = t.GuestName,
                     WaitingMinutes = EF.Functions.DateDiffMinute(t.JoinedAt, now)
                 })
+                .Take(12)
                 .ToListAsync();
 
             // ============ END NOW UPNEXT ================= //
