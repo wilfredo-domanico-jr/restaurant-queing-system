@@ -1,5 +1,6 @@
 ﻿using back_end.Data;
 using back_end.DTO.Admin;
+using back_end.DTO.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
@@ -89,33 +90,50 @@ namespace back_end.Services
             };
         }
 
-        public async Task<List<CurrentQueueResponseDto>> GetCurrentQueueAsync()
+        public async Task<PaginatedResponseDto<CurrentQueueResponseDto>> GetCurrentQueueAsync(int page)
         {
+            int pageSize = 5;
             var today = DateTime.Today;
             var tomorrow = today.AddDays(1);
 
             // ============ START CURRENT QUEUE ================= //
-            var data = await _context.QueueTickets
-            .Where(t =>
-                (t.Status == "Waiting" || t.Status == "Called") &&
-                t.JoinedAt >= today &&
-                t.JoinedAt < tomorrow)
-            .Select(t => new CurrentQueueResponseDto
-            {
-                Id = t.Id,
-                TicketNumber = t.TicketNumber,
-                GuestName = t.GuestName,
-                PartySize = t.PartySize,
-                Section = t.Section,
-                WaitingMinutes = EF.Functions.DateDiffMinute(t.JoinedAt, DateTime.Now),
-                JoinedAt = t.JoinedAt,
-                Status = t.Status
-            })
-            .ToListAsync();
+            var query = _context.QueueTickets
+      .Where(t =>
+          (t.Status == "Waiting" || t.Status == "Called") &&
+          t.JoinedAt >= today &&
+          t.JoinedAt < tomorrow);
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(t => t.JoinedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(t => new CurrentQueueResponseDto
+                {
+                    Id = t.Id,
+                    TicketNumber = t.TicketNumber,
+                    GuestName = t.GuestName,
+                    PartySize = t.PartySize,
+                    Section = t.Section,
+                    WaitingMinutes = EF.Functions.DateDiffMinute(t.JoinedAt, DateTime.Now),
+                    JoinedAt = t.JoinedAt,
+                    Status = t.Status
+                })
+                .ToListAsync();
+
             // ============ END WAITING COUNT ================= //
 
 
-            return data;
+
+            return new PaginatedResponseDto<CurrentQueueResponseDto>
+            {
+                Items = items,
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling((double)totalItems / pageSize)
+            };
         }
     }
 }

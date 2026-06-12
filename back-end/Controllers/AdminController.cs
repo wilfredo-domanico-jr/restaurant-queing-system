@@ -33,9 +33,9 @@ namespace back_end.Controllers
         }
 
         [HttpGet("current-queue")]
-        public async Task<IActionResult> GetCurrentQueue()
+        public async Task<IActionResult> GetCurrentQueue([FromQuery] int page = 1)
         {
-            var result = await _adminService.GetCurrentQueueAsync();
+            var result = await _adminService.GetCurrentQueueAsync(page);
 
             return Ok(new
             {
