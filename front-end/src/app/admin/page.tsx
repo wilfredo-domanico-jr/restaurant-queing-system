@@ -54,7 +54,7 @@ export default function Admin() {
         <StatsCard label="No-shows" value={stats?.noShow ?? 0} sub="today" />
         <StatsCard
           label="Avg. Wait"
-          value={stats?.averageWaitingTime ?? 0}
+          value={Math.round(stats?.averageWaitingTime ?? 0)}
           sub="minutes"
         />
       </div>

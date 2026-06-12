@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import { useDelete } from "@/src/hooks/useDelete";
+import { usePatch } from "@/src/hooks/usePatch";
 import type { CurrentQueueResponse } from "@/src/types/admin.types";
 import CurrentQueueTable from "./CurrentQueueTable";
 
@@ -22,6 +23,7 @@ export default function CurrentQueue({
     useFetch<CurrentQueueResponse>(`/admin/current-queue?page=${page}`);
 
   const { remove: deleteQueue } = useDelete("/admin/delete-queue");
+  const { patch: updateStatus } = usePatch("/admin/update-queue-status");
 
   useEffect(() => {
     loadCurrentQueue();
@@ -50,6 +52,17 @@ export default function CurrentQueue({
     }
   };
 
+  const handleUpdate = async (id: number, status: string) => {
+    try {
+      await updateStatus(id, { status });
+
+      await loadCurrentQueue();
+      await refreshTodayStats();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="col-span-4">
       <div className="bg-white border border-border rounded-2xl overflow-hidden">
@@ -68,6 +81,7 @@ export default function CurrentQueue({
             <CurrentQueueTable
               queueData={queueData}
               onDelete={handleDelete}
+              onUpdate={handleUpdate}
               deletingId={deletingId}
             />
 
