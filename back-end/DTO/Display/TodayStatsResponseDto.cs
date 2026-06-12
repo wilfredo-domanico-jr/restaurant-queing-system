@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace back_end.DTO.Stats
+﻿
+namespace back_end.DTO.Display
 {
     public class TodayStatsResponseDto
     {

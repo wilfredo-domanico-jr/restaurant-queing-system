@@ -1,5 +1,5 @@
 ﻿
-namespace back_end.DTO.Stats
+namespace back_end.DTO.Display
 {
     public class SectionStatusResponseDto
     {

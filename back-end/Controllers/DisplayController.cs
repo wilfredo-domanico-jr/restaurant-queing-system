@@ -11,19 +11,19 @@ namespace back_end.Controllers
     public class DisplayController : ControllerBase
     {
 
-        private readonly IStatService _statService;
+        private readonly IDisplayService _displayService;
         private readonly ILogger<DisplayController> _logger;
 
-        public DisplayController(IStatService statService, ILogger<DisplayController> logger)
+        public DisplayController(IDisplayService displayService, ILogger<DisplayController> logger)
         {
-            _statService = statService;
+            _displayService = displayService;
             _logger = logger;
         }
 
         [HttpGet("stats-today")]
         public async Task<IActionResult> GetTodayStats()
         {
-            var result = await _statService.GetTodayStatsAsync();
+            var result = await _displayService.GetTodayStatsAsync();
 
             return Ok(new
             {
@@ -35,11 +35,24 @@ namespace back_end.Controllers
         [HttpGet("sections-status")]
         public async Task<IActionResult> GetSectionStatus()
         {
-            var result = await _statService.GetSectionStatusAsync();
+            var result = await _displayService.GetSectionStatusAsync();
 
             return Ok(new
             {
                 message = "Section status retrieved successfully",
+                data = result
+            });
+        }
+
+
+        [HttpGet("now-serving")]
+        public async Task<IActionResult> GetNowServing()
+        {
+            var result = await _displayService.GetNowServingAsync();
+
+            return Ok(new
+            {
+                message = "Now serving retrieved successfully",
                 data = result
             });
         }

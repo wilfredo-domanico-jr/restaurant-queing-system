@@ -1,14 +1,14 @@
 ﻿using back_end.Data;
-using back_end.DTO.Stats;
+using back_end.DTO.Display;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
 {
-    public class StatService : IStatService
+    public class DisplayService : IDisplayService
     {
         private readonly AppDbContext _context;
 
-        public StatService(AppDbContext context)
+        public DisplayService(AppDbContext context)
         {
             _context = context;
         }
@@ -130,6 +130,40 @@ namespace back_end.Services
                 Outdoor = outdoor,
                 Bar = bar,
                 VIP = vip,
+            };
+        }
+
+        public async Task<NowServingResponseDto?> GetNowServingAsync()
+        {
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
+
+            // ============ START NOW SERVING ================= //
+
+            var data = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Called" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow &&
+                t.CalledAt != null)
+            .OrderBy(t => t.CalledAt)
+            .FirstOrDefaultAsync();
+
+
+            if (data == null)
+                return null;
+
+
+            // ============ END NOW SERVING ================= //
+
+            return new NowServingResponseDto
+            {
+                TicketNumber = data.TicketNumber,
+                GuestName = data.GuestName,
+                PartySize = data.PartySize,
+                JoinedAt = data.JoinedAt,
+                Section = data.Section
+
             };
         }
 

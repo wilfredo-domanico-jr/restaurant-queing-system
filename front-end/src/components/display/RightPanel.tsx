@@ -13,8 +13,7 @@ export default function RightPanel() {
     loadTodayStats();
     loadSectionStatus();
   }, []);
-  console.log("stats", stats);
-  console.log("status", status);
+
   return (
     <div className="hidden md:flex bg-white/[0.03] border-l border-white/10 p-6 flex-col gap-5 overflow-y-auto">
       <div className="text-[10px] font-semibold tracking-[2.5px] uppercase text-white/30 pb-2 border-b border-white/10">
