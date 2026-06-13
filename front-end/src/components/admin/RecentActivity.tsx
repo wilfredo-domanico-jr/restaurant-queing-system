@@ -1,18 +1,15 @@
 "use client";
-import { useEffect } from "react";
-import { useFetch } from "@/src/hooks/useFetch";
-import type { RecentActivityResponse } from "@/src/types/admin.types";
 
-export default function RecentActivity() {
-  const { data: recentActivity, load: loadRecentActivity } =
-    useFetch<RecentActivityResponse>("/admin/activity-logs");
+import type { RecentActivityItem } from "@/src/types/admin.types";
 
-  useEffect(() => {
-    loadRecentActivity();
-  }, []);
+type RecentActivityProps = {
+  recentActivity: RecentActivityItem[];
+};
 
-  const activities = recentActivity?.data ?? [];
-  console.log(activities);
+export default function RecentActivity({
+  recentActivity,
+}: RecentActivityProps) {
+  const activities = recentActivity ?? [];
 
   const getTypeColor = (type: string) => {
     switch (type) {

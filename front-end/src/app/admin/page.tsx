@@ -2,7 +2,10 @@
 
 import { useEffect } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
-import type { TodayStatsResponse } from "@/src/types/admin.types";
+import type {
+  TodayStatsResponse,
+  RecentActivityResponse,
+} from "@/src/types/admin.types";
 import CurrentQueue from "@/src/components/admin/CurrentQueue";
 import Header from "@/src/components/admin/Header";
 import Sidebar from "@/src/components/admin/Sidebar";
@@ -12,15 +15,24 @@ export default function Admin() {
   const { data: todayStats, load: loadTodayStats } =
     useFetch<TodayStatsResponse>("/admin/stats-today");
 
+  const { data: recentActivity, load: loadRecentActivity } =
+    useFetch<RecentActivityResponse>("/admin/activity-logs");
+
   useEffect(() => {
     loadTodayStats();
+    loadRecentActivity();
   }, []);
+
+  console.log(todayStats?.message);
+  console.log(recentActivity?.message);
 
   const refreshTodayStats = async () => {
     await loadTodayStats();
+    await loadRecentActivity();
   };
 
   const stats = todayStats?.data;
+  const recentActivityData = recentActivity?.data ?? [];
   const totalGuest = (stats?.waiting ?? 0) + (stats?.called ?? 0);
 
   function callNext() {
@@ -60,7 +72,7 @@ export default function Admin() {
           totalGuest={totalGuest}
           refreshTodayStats={refreshTodayStats}
         />
-        <Sidebar />
+        <Sidebar recentActivity={recentActivityData} />
       </div>
     </div>
   );

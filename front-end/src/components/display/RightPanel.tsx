@@ -45,7 +45,9 @@ export default function RightPanel() {
         <div className="flex justify-between items-center py-2">
           <span className="text-xs text-white/50">Avg. wait time</span>
           <span className="text-sm font-semibold text-white">
-            {stats?.data?.averageWaitingTime ?? "—"}
+            {stats?.data?.averageWaitingTime
+              ? Math.round(stats.data.averageWaitingTime)
+              : "—"}
           </span>
         </div>
 

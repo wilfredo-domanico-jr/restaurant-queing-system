@@ -1,6 +1,12 @@
 import RecentActivity from "./RecentActivity";
 
-export default function Sidebar() {
+import type { RecentActivityItem } from "@/src/types/admin.types";
+
+type SidebarProps = {
+  recentActivity: RecentActivityItem[];
+};
+
+export default function Sidebar({ recentActivity }: SidebarProps) {
   return (
     <div className="col-span-1 pl-0 md:pl-5 pt-4 md:pt-0 flex flex-col gap-4">
       <div className="bg-white border border-border rounded-2xl p-5">
@@ -10,7 +16,7 @@ export default function Sidebar() {
         <div className="text-[13px] text-text-muted">No data yet</div>
       </div>
 
-      <RecentActivity />
+      <RecentActivity recentActivity={recentActivity} />
     </div>
   );
 }
