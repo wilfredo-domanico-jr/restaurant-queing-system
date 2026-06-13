@@ -37,28 +37,24 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Rate Limiting for Admin side (read-only)
+// Rate Limiting 
 builder.Services.AddRateLimiter(options =>
 {
+
+    // For Admin side (read-only)
     options.AddFixedWindowLimiter("admin-read", opt =>
     {
         opt.PermitLimit = 60;
         opt.Window = TimeSpan.FromMinutes(1);
     });
 
-    options.RejectionStatusCode = 429;
-});
 
-
-
-// Rate Limiting for Admin side (write)
-builder.Services.AddRateLimiter(options =>
-{
+    // For Admin side (write)
     options.AddFixedWindowLimiter("admin-write", opt =>
-    {
-        opt.PermitLimit = 10;
-        opt.Window = TimeSpan.FromMinutes(1);
-    });
+  {
+      opt.PermitLimit = 10;
+      opt.Window = TimeSpan.FromMinutes(1);
+  });
 
     options.RejectionStatusCode = 429;
 });
