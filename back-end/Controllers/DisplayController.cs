@@ -7,7 +7,7 @@ namespace back_end.Controllers
 {
     [ApiController]
     [Route("api/display")]
-    [EnableRateLimiting("fixed")]
+    [EnableRateLimiting("display-read")]
     public class DisplayController : ControllerBase
     {
 

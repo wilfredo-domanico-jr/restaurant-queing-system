@@ -8,7 +8,7 @@ namespace back_end.Controllers
 {
     [ApiController]
     [Route("api/kiosk")]
-    [EnableRateLimiting("fixed")]
+
     public class KioskController : ControllerBase
     {
         private readonly IKioskService _queueService;
@@ -20,6 +20,8 @@ namespace back_end.Controllers
             _logger = logger;
         }
 
+
+        [EnableRateLimiting("kiosk-write")]
         [HttpPost("create-ticket")]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto ticket)
         {

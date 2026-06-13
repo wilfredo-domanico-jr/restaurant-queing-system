@@ -41,6 +41,22 @@ builder.Services.AddCors(options =>
 builder.Services.AddRateLimiter(options =>
 {
 
+
+    // For Kiosk side (write)
+    options.AddFixedWindowLimiter("kiosk-write", opt =>
+    {
+        opt.PermitLimit = 10;
+        opt.Window = TimeSpan.FromMinutes(1);
+    });
+
+
+    // For Display side (read-only)
+    options.AddFixedWindowLimiter("display-read", opt =>
+    {
+        opt.PermitLimit = 60;
+        opt.Window = TimeSpan.FromMinutes(1);
+    });
+
     // For Admin side (read-only)
     options.AddFixedWindowLimiter("admin-read", opt =>
     {
