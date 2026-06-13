@@ -8,7 +8,7 @@ namespace back_end.Controllers
 {
     [ApiController]
     [Route("api/admin")]
-    [EnableRateLimiting("fixed")]
+
     public class AdminController : ControllerBase
     {
 
@@ -21,6 +21,7 @@ namespace back_end.Controllers
             _logger = logger;
         }
 
+        [EnableRateLimiting("admin-read")]
         [HttpGet("stats-today")]
         public async Task<IActionResult> GetTodayStats()
         {
@@ -33,6 +34,7 @@ namespace back_end.Controllers
             });
         }
 
+        [EnableRateLimiting("admin-read")]
         [HttpGet("current-queue")]
         public async Task<IActionResult> GetCurrentQueue([FromQuery] int page = 1)
         {
@@ -45,6 +47,8 @@ namespace back_end.Controllers
             });
         }
 
+
+        [EnableRateLimiting("admin-write")]
         [HttpDelete("delete-queue")]
         public async Task<IActionResult> DeleteQueue([FromQuery] int id)
         {
@@ -64,10 +68,11 @@ namespace back_end.Controllers
             });
         }
 
+        [EnableRateLimiting("admin-write")]
         [HttpPatch("update-queue-status")]
         public async Task<IActionResult> UpdateQueueStatus(
-            [FromQuery] int id,
-            [FromBody] UpdateQueueStatusDto dto)
+                   [FromQuery] int id,
+                   [FromBody] UpdateQueueStatusDto dto)
         {
             var result = await _adminService.UpdateQueueStatusAsync(id, dto.Status);
 
@@ -85,7 +90,7 @@ namespace back_end.Controllers
             });
         }
 
-
+        [EnableRateLimiting("admin-read")]
         [HttpGet("activity-logs")]
         public async Task<IActionResult> GetTodayActivityLog()
         {

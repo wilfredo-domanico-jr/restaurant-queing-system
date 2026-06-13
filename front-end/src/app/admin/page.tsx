@@ -23,10 +23,6 @@ export default function Admin() {
   const stats = todayStats?.data;
   const totalGuest = (stats?.waiting ?? 0) + (stats?.called ?? 0);
 
-  function simulateJoin() {
-    console.log("Simulate guest clicked");
-  }
-
   function callNext() {
     console.log("Call next clicked");
   }
@@ -34,7 +30,7 @@ export default function Admin() {
   return (
     <div className="h-auto bg-[#F9F5F1]">
       {/* HEADER */}
-      <Header simulateJoin={simulateJoin} callNext={callNext} />
+      <Header callNext={callNext} />
 
       {/* STATS */}
 

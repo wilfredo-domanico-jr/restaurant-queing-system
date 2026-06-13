@@ -33,3 +33,17 @@ export interface CurrentQueueResponse {
     totalPages: number;
   };
 }
+
+// Response Item
+export interface RecentActivityItem {
+  id: number;
+  type: string;
+  description: string;
+  createdAt: string;
+}
+
+// Response
+export interface RecentActivityResponse {
+  message: string;
+  data: RecentActivityItem[];
+}
