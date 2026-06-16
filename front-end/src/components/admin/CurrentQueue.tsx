@@ -21,14 +21,24 @@ export default function CurrentQueue({
   const [page, setPage] = useState(1);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const { data: currentQueue, load: loadCurrentQueue } =
-    useFetch<CurrentQueueResponse>(`/admin/current-queue?page=${page}`);
+  const [currentQueue, setCurrentQueue] = useState<CurrentQueueResponse | null>(
+    null,
+  );
+
+  const { load: loadCurrentQueue } = useFetch<CurrentQueueResponse>(
+    `/admin/current-queue?page=${page}`,
+  );
 
   const { remove: deleteQueue } = useDelete("/admin/delete-queue");
   const { patch: updateStatus } = usePatch("/admin/update-queue-status");
 
   useEffect(() => {
-    loadCurrentQueue();
+    const fetchData = async () => {
+      const result = await loadCurrentQueue();
+      setCurrentQueue(result);
+    };
+
+    fetchData();
   }, [loadCurrentQueue, page]);
 
   const queueData = currentQueue?.data.items ?? [];
@@ -46,19 +56,24 @@ export default function CurrentQueue({
   const handleDelete = async (id: number) => {
     try {
       setDeletingId(id);
+
       await deleteQueue(id);
-      await loadCurrentQueue();
+
+      const updated = await loadCurrentQueue();
+      setCurrentQueue(updated);
+
       await refreshTodayStats();
     } finally {
       setDeletingId(null);
     }
   };
-
   const handleUpdate = async (id: number, status: string) => {
     try {
       await updateStatus(id, { status });
 
-      await loadCurrentQueue();
+      const updated = await loadCurrentQueue();
+      setCurrentQueue(updated);
+
       await refreshTodayStats();
     } catch (err) {
       console.error(err);

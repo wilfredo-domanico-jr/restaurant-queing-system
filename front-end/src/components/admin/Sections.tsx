@@ -9,8 +9,6 @@ type SectionProps = {
 export default function Sections({ sectionsData }: SectionProps) {
   const hasData = !!sectionsData;
 
-  console.log("eto yung sections", sectionsData);
-
   const getSectionColor = (section: string) => {
     switch (section) {
       case "indoor":

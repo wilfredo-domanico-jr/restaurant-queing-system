@@ -14,19 +14,38 @@ import Sidebar from "@/src/components/admin/Sidebar";
 import StatsCard from "@/src/components/admin/StatCard";
 
 export default function Admin() {
-  const { data: todayStats, load: loadTodayStats } =
+  const [todayStats, setTodayStats] = useState<TodayStatsResponse | null>(null);
+
+  const [sections, setSections] = useState<SectionStatusResponse | null>(null);
+
+  const [recentActivity, setRecentActivity] =
+    useState<RecentActivityResponse | null>(null);
+
+  const { load: loadTodayStats } =
     useFetch<TodayStatsResponse>("/admin/stats-today");
 
-  const { data: sections, load: loadSectionStatus } =
-    useFetch<SectionStatusResponse>("/admin/sections-status");
+  const { load: loadSectionStatus } = useFetch<SectionStatusResponse>(
+    "/admin/sections-status",
+  );
 
-  const { data: recentActivity, load: loadRecentActivity } =
-    useFetch<RecentActivityResponse>("/admin/activity-logs");
+  const { load: loadRecentActivity } = useFetch<RecentActivityResponse>(
+    "/admin/activity-logs",
+  );
 
   useEffect(() => {
-    loadTodayStats();
-    loadSectionStatus();
-    loadRecentActivity();
+    const loadData = async () => {
+      const [statsRes, sectionsRes, activityRes] = await Promise.all([
+        loadTodayStats(),
+        loadSectionStatus(),
+        loadRecentActivity(),
+      ]);
+
+      setTodayStats(statsRes);
+      setSections(sectionsRes);
+      setRecentActivity(activityRes);
+    };
+
+    loadData();
   }, []);
 
   console.log(todayStats?.message);
@@ -34,11 +53,16 @@ export default function Admin() {
   console.log(recentActivity?.message);
 
   const refreshTodayStats = async () => {
-    await loadTodayStats();
-    await loadSectionStatus();
-    await loadRecentActivity();
-  };
+    const [statsRes, sectionsRes, activityRes] = await Promise.all([
+      loadTodayStats(),
+      loadSectionStatus(),
+      loadRecentActivity(),
+    ]);
 
+    setTodayStats(statsRes);
+    setSections(sectionsRes);
+    setRecentActivity(activityRes);
+  };
   const stats = todayStats?.data;
   const sectionsData = sections?.data ?? {
     indoor: 0,
@@ -69,8 +93,6 @@ export default function Admin() {
       }, 300);
     }, 2800);
   }
-
-
 
   return (
     <div className="h-auto bg-[#F9F5F1]">
