@@ -39,7 +39,12 @@ export default function Admin() {
   };
 
   const stats = todayStats?.data;
-  const sectionsData = sections?.data ?? [];
+  const sectionsData = sections?.data ?? {
+    indoor: 0,
+    outdoor: 0,
+    bar: 0,
+    vip: 0,
+  };
   const recentActivityData = recentActivity?.data ?? [];
   const totalGuest = (stats?.waiting ?? 0) + (stats?.called ?? 0);
 
