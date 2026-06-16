@@ -8,11 +8,13 @@ import type { CurrentQueueResponse } from "@/src/types/admin.types";
 import CurrentQueueTable from "./CurrentQueueTable";
 
 type CurrentQueueProps = {
+  showToast: (message: string) => void;
   totalGuest: number;
   refreshTodayStats: () => Promise<void>;
 };
 
 export default function CurrentQueue({
+  showToast,
   totalGuest,
   refreshTodayStats,
 }: CurrentQueueProps) {
@@ -79,6 +81,7 @@ export default function CurrentQueue({
         {hasGuests ? (
           <>
             <CurrentQueueTable
+              showToast={showToast}
               queueData={queueData}
               onDelete={handleDelete}
               onUpdate={handleUpdate}

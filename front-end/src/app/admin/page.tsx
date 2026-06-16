@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
+
 import type {
   TodayStatsResponse,
   SectionStatusResponse,
@@ -48,8 +49,29 @@ export default function Admin() {
   const recentActivityData = recentActivity?.data ?? [];
   const totalGuest = (stats?.waiting ?? 0) + (stats?.called ?? 0);
 
+  const [toast, setToast] = useState<{
+    message: string;
+    visible: boolean;
+  } | null>(null);
+
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function showToast(message: string) {
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    setToast({ message, visible: true });
+
+    timerRef.current = setTimeout(() => {
+      setToast((prev) => (prev ? { ...prev, visible: false } : null));
+
+      timerRef.current = setTimeout(() => {
+        setToast(null);
+      }, 300);
+    }, 2800);
+  }
+
   function callNext() {
-    console.log("Call next clicked");
+    showToast("Calling next guest...");
   }
 
   return (
@@ -82,6 +104,7 @@ export default function Admin() {
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-0 px-4 sm:px-6 pb-6">
         <CurrentQueue
+          showToast={showToast}
           totalGuest={totalGuest}
           refreshTodayStats={refreshTodayStats}
         />
@@ -89,6 +112,14 @@ export default function Admin() {
           recentActivity={recentActivityData}
           sectionsData={sectionsData}
         />
+      </div>
+
+      <div
+        className={`fixed bottom-6 right-6 bg-text text-white px-5 py-3 rounded-xl text-xs font-medium z-[200] max-w-[300px] transition-all duration-300
+    ${toast?.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"}
+  `}
+      >
+        {toast?.message}
       </div>
     </div>
   );

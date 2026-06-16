@@ -1,6 +1,7 @@
 import type { CurrentQueueItem } from "@/src/types/admin.types";
 
 type CurrentQueueProps = {
+  showToast: (message: string) => void;
   queueData: CurrentQueueItem[];
   onDelete: (id: number) => Promise<any>;
   onUpdate: (id: number, status: string) => Promise<any>;
@@ -8,6 +9,7 @@ type CurrentQueueProps = {
 };
 
 export default function CurrentQueueTable({
+  showToast,
   queueData,
   onDelete,
   onUpdate,
@@ -102,14 +104,22 @@ export default function CurrentQueueTable({
                   {/* Start Called and Seated Buttons */}
                   {item.status === "Waiting" ? (
                     <button
-                      onClick={() => onUpdate(item.id, "Called")}
+                      onClick={() => {
+                        onUpdate(item.id, "Called");
+                        showToast(
+                          `📣 Now calling: ${item.ticketNumber} — ${item.guestName}`,
+                        );
+                      }}
                       className="cursor-pointer px-2.5 py-1 rounded text-[11px] font-semibold bg-[#DCFCE7] text-[#166534] hover:bg-[#BBF7D0] cursor-pointers"
                     >
                       Call
                     </button>
                   ) : item.status === "Called" ? (
                     <button
-                      onClick={() => onUpdate(item.id, "Seated")}
+                      onClick={() => {
+                        onUpdate(item.id, "Seated");
+                        showToast(`✅ ${item.guestName} seated`);
+                      }}
                       className="cursor-pointer px-2.5 py-1 rounded text-[11px] font-semibold bg-[#E0E7FF] text-[#3730A3] hover:bg-[#C7D2FE]"
                     >
                       Seat
@@ -120,14 +130,20 @@ export default function CurrentQueueTable({
                   {/* Start Delete or No-Show Button */}
                   {item.status === "Called" ? (
                     <button
-                      onClick={() => onUpdate(item.id, "No-Show")}
+                      onClick={() => {
+                        onUpdate(item.id, "No-Show");
+                        showToast(`❌ ${item.guestName} marked no-show`);
+                      }}
                       className="cursor-pointer px-2.5 py-1 rounded text-[11px] font-semibold bg-[#FEE2E2] text-[#991B1B] hover:bg-[#FECACA]"
                     >
                       No-show
                     </button>
                   ) : (
                     <button
-                      onClick={() => onDelete(item.id)}
+                      onClick={() => {
+                        onDelete(item.id);
+                        showToast(`Removed ${item.guestName} from queue`);
+                      }}
                       disabled={deletingId === item.id}
                       className="cursor-pointer px-2.5 py-1 rounded text-[11px] font-semibold bg-[#FEE2E2] text-[#991B1B] hover:bg-[#FECACA]"
                     >

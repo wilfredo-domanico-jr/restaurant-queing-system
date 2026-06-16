@@ -58,8 +58,7 @@ export default function Kiosk() {
           />
 
           <p className="text-xs text-text-muted text-center mt-[-1rem]">
-            By joining, you agree to our table allocation policy. Ticket expires
-            after 5 minutes of calling.
+            By joining, you agree to our table allocation policy. 
           </p>
         </div>
       </div>
