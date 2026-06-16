@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import type {
   TodayStatsResponse,
+  SectionStatusResponse,
   RecentActivityResponse,
 } from "@/src/types/admin.types";
 import CurrentQueue from "@/src/components/admin/CurrentQueue";
@@ -15,23 +16,30 @@ export default function Admin() {
   const { data: todayStats, load: loadTodayStats } =
     useFetch<TodayStatsResponse>("/admin/stats-today");
 
+  const { data: sections, load: loadSectionStatus } =
+    useFetch<SectionStatusResponse>("/admin/sections-status");
+
   const { data: recentActivity, load: loadRecentActivity } =
     useFetch<RecentActivityResponse>("/admin/activity-logs");
 
   useEffect(() => {
     loadTodayStats();
+    loadSectionStatus();
     loadRecentActivity();
   }, []);
 
   console.log(todayStats?.message);
+  console.log(sections?.message);
   console.log(recentActivity?.message);
 
   const refreshTodayStats = async () => {
     await loadTodayStats();
+    await loadSectionStatus();
     await loadRecentActivity();
   };
 
   const stats = todayStats?.data;
+  const sectionsData = sections?.data ?? [];
   const recentActivityData = recentActivity?.data ?? [];
   const totalGuest = (stats?.waiting ?? 0) + (stats?.called ?? 0);
 
@@ -72,7 +80,10 @@ export default function Admin() {
           totalGuest={totalGuest}
           refreshTodayStats={refreshTodayStats}
         />
-        <Sidebar recentActivity={recentActivityData} />
+        <Sidebar
+          recentActivity={recentActivityData}
+          sectionsData={sectionsData}
+        />
       </div>
     </div>
   );

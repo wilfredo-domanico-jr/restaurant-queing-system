@@ -1,17 +1,15 @@
 "use client";
-import { useFetch } from "@/src/hooks/useFetch";
-import { useEffect } from "react";
-import type { SectionStatusResponse } from "@/src/types/admin.types";
 
-export default function Sections() {
-  const { data: status, load: loadSectionStatus } =
-    useFetch<SectionStatusResponse>("/admin/sections-status");
+import type { SectionStatusItem } from "@/src/types/admin.types";
 
-  useEffect(() => {
-    loadSectionStatus();
-  }, []);
+type SectionProps = {
+  sectionsData: SectionStatusItem;
+};
 
-  const hasData = !!status?.data;
+export default function Sections({ sectionsData }: SectionProps) {
+  const hasData = !!sectionsData;
+
+  console.log("eto yung sections", sectionsData);
 
   const getSectionColor = (section: string) => {
     switch (section) {
@@ -55,7 +53,7 @@ export default function Sections() {
 
       {hasData ? (
         <div className="flex flex-col gap-2">
-          {Object.entries(status!.data).map(([key, value]) => (
+          {Object.entries(sectionsData ?? {}).map(([key, value]) => (
             <div
               key={key}
               className="flex justify-between items-center px-2.5 py-2 bg-[#FDFAF8] rounded-lg border border-border"
@@ -63,9 +61,10 @@ export default function Sections() {
               <span className="flex items-center gap-1.5 text-[13px] font-medium text-text">
                 <span
                   className={`w-2 h-2 rounded-full ${getSectionColor(key)}`}
-                ></span>
+                />
                 {getSectionLabel(key)}
               </span>
+
               <span className="text-[13px] font-bold text-brand">{value}</span>
             </div>
           ))}

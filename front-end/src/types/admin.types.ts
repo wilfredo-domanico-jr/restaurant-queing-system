@@ -48,13 +48,16 @@ export interface RecentActivityResponse {
   data: RecentActivityItem[];
 }
 
+// Response Item
+export interface SectionStatusItem {
+  indoor: number;
+  outdoor: number;
+  bar: number;
+  vip: number;
+}
+
 // Response
 export interface SectionStatusResponse {
   message: string;
-  data: {
-    indoor: number;
-    outdoor: number;
-    bar: number;
-    vip: number;
-  };
+  data: SectionStatusItem;
 }
