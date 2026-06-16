@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import type {
   TodayStatsResponse,
@@ -9,17 +9,28 @@ import type {
 import SectionRow from "./SectionRow";
 
 export default function RightPanel() {
-  const { data: stats, load: loadTodayStats } = useFetch<TodayStatsResponse>(
+  const [stats, setStats] = useState<TodayStatsResponse | null>(null);
+  const [sectionStatus, setSectionStatus] =
+    useState<SectionStatusResponse | null>(null);
+
+  const { load: loadTodayStats } = useFetch<TodayStatsResponse>(
     "/display/stats-today",
   );
 
-  const { data: status, load: loadSectionStatus } =
-    useFetch<SectionStatusResponse>("/display/sections-status");
+  const { load: loadSectionStatus } = useFetch<SectionStatusResponse>(
+    "/display/sections-status",
+  );
 
   useEffect(() => {
-    loadTodayStats();
-    loadSectionStatus();
-  }, []);
+    const fetchData = async () => {
+      const resultStats = await loadTodayStats();
+      const resultSectionStatus = await loadSectionStatus();
+      setStats(resultStats);
+      setSectionStatus(resultSectionStatus);
+    };
+
+    fetchData();
+  }, [loadTodayStats, loadSectionStatus]);
 
   return (
     <div className="hidden md:flex bg-white/[0.03] border-l border-white/10 p-6 flex-col gap-5 overflow-y-auto">
@@ -64,10 +75,13 @@ export default function RightPanel() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <SectionRow name="Indoor" waiting={status?.data?.indoor ?? 0} />
-        <SectionRow name="Outdoor" waiting={status?.data?.outdoor ?? 0} />
-        <SectionRow name="Bar" waiting={status?.data?.bar ?? 0} />
-        <SectionRow name="VIP" waiting={status?.data?.vip ?? 0} />
+        <SectionRow name="Indoor" waiting={sectionStatus?.data?.indoor ?? 0} />
+        <SectionRow
+          name="Outdoor"
+          waiting={sectionStatus?.data?.outdoor ?? 0}
+        />
+        <SectionRow name="Bar" waiting={sectionStatus?.data?.bar ?? 0} />
+        <SectionRow name="VIP" waiting={sectionStatus?.data?.vip ?? 0} />
       </div>
 
       <div className="bg-brand/15 rounded-xl p-3.5 text-[13px] text-brand-mid leading-relaxed">

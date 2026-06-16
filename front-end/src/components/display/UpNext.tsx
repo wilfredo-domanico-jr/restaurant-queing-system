@@ -1,15 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import type { UpNextResponse } from "@/src/types/display.types";
 
 export default function UpNext() {
-  const { data: upNext, load: loadUpNext } =
-    useFetch<UpNextResponse>("/display/up-next");
+  const [upNext, setUpNext] = useState<UpNextResponse | null>(null);
+
+  const { load: loadUpNext } = useFetch<UpNextResponse>("/display/up-next");
 
   useEffect(() => {
     loadUpNext();
+  }, [loadUpNext]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await loadUpNext();
+      setUpNext(result);
+    };
+
+    fetchData();
   }, [loadUpNext]);
 
   const items = upNext?.data ?? [];

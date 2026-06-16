@@ -1,15 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import type { NowServingResponse } from "@/src/types/display.types";
 
 export default function NowServing() {
-  const { data: nowServing, load: loadNowServing } =
-    useFetch<NowServingResponse>("/display/now-serving");
+  const [nowServing, setNowServing] = useState<NowServingResponse | null>(null);
+
+  const { load: loadNowServing } = useFetch<NowServingResponse>(
+    "/display/now-serving",
+  );
 
   useEffect(() => {
-    loadNowServing();
+    const fetchData = async () => {
+      const result = await loadNowServing();
+      setNowServing(result);
+    };
+
+    fetchData();
   }, [loadNowServing]);
 
   const data = nowServing?.data;

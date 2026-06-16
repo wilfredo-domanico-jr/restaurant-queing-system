@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import Navbar from "@/src/components/layout/Navbar";
+import { ToastProvider } from "../providers/ToastProvider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -40,7 +41,7 @@ export default function RootLayout({
     >
       <body className="font-sans bg-cream text-text m-0 p-0 box-border">
         <Navbar />
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );
