@@ -9,7 +9,7 @@ namespace back_end.Services
         Task<PaginatedResponseDto<CurrentQueueResponseDto>> GetCurrentQueueAsync(int page);
         Task<bool> DeleteQueueAsync(int id);
         Task<bool> UpdateQueueStatusAsync(int id, string status);
-
+        Task<SectionStatusResponseDto> GetSectionStatusAsync();
         Task<List<ActivityLogs>> GetTodayActivityLogAsync();
     }
 }

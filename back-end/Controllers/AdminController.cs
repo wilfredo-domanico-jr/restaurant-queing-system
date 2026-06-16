@@ -90,6 +90,20 @@ namespace back_end.Controllers
             });
         }
 
+
+        [HttpGet("sections-status")]
+        public async Task<IActionResult> GetSectionStatus()
+        {
+            var result = await _adminService.GetSectionStatusAsync();
+
+            return Ok(new
+            {
+                message = "Admin - Section status retrieved successfully",
+                data = result
+            });
+        }
+
+
         [EnableRateLimiting("admin-read")]
         [HttpGet("activity-logs")]
         public async Task<IActionResult> GetTodayActivityLog()
