@@ -70,14 +70,12 @@ export default function Admin() {
     }, 2800);
   }
 
-  function callNext() {
-    showToast("Calling next guest...");
-  }
+
 
   return (
     <div className="h-auto bg-[#F9F5F1]">
       {/* HEADER */}
-      <Header callNext={callNext} />
+      <Header />
 
       {/* STATS */}
 
