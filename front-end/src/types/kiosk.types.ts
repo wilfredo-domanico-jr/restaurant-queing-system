@@ -1,5 +1,5 @@
-// DTO type
-export interface CreateTicketDto {
+// Request
+export interface CreateTicketRequest {
   partySize: number;
   section: string;
   guestName: string;

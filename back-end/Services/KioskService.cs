@@ -6,5 +6,7 @@ namespace back_end.Services
     public interface IKioskService
     {
         Task<CreateTicketResponseDto> CreateTicketAsync(CreateTicketDto order);
+        Task<StatsResponseDto> GetStatsAsync();
+        
     }
 }

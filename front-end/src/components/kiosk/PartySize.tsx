@@ -2,7 +2,7 @@
 
 type PartySizeProps = {
   partySize: number;
-  setPartySize: React.Dispatch<React.SetStateAction<number>>;
+  setPartySize: (value: number) => void;
 };
 
 export default function PartySize({ partySize, setPartySize }: PartySizeProps) {
@@ -19,22 +19,28 @@ export default function PartySize({ partySize, setPartySize }: PartySizeProps) {
           <button
             key={i}
             onClick={() => setPartySize(i === 6 ? 7 : (p as number))}
-            className={`flex-1 min-w-[70px] max-w-[100px] aspect-square rounded-2xl border-2 bg-white flex flex-col items-center justify-center transition-all cursor-pointer
+            className={`flex-1 min-w-[70px] max-w-[100px] aspect-square rounded-2xl border-3 cursor-pointer transition-all duration-150 flex flex-col items-center justify-center gap-1 hover:border-brand-mid
               ${
                 partySize === (i === 6 ? 7 : p)
                   ? "border-brand bg-brand-light"
-                  : "border-border hover:border-brand-mid"
+                  : "bg-white border-border hover:border-brand-mid"
               }`}
           >
-            <span className="font-serif text-3xl">{p}</span>
-            <span className="text-[10px] text-text-muted uppercase">
+            <span
+              className={`font-serif text-3xl leading-none ${partySize === (i === 6 ? 7 : p) ? "text-brand" : "text-text"}`}
+            >
+              {p}
+            </span>
+            <span className="text-[12px] text-text-muted uppercase font-bold">
               {i === 0
                 ? "solo"
                 : i === 1
                   ? "pair"
-                  : i === 6
-                    ? "event"
-                    : "group"}
+                  : i === 5
+                    ? "large"
+                    : i === 6
+                      ? "event"
+                      : "group"}
             </span>
           </button>
         ))}

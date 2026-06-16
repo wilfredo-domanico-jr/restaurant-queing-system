@@ -1,18 +1,21 @@
 import { useCallback, useState } from "react";
 import { apiClient } from "@/src/lib/apiClient";
 
-export function usePatch<T, B = any>(endpoint: string) {
+export function usePost<T, B = any>(endpoint: string) {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const patch = useCallback(
-    async (id: number, body: B) => {
+  const post = useCallback(
+    async (body: B) => {
       try {
         setLoading(true);
-        const json = await apiClient<T>(`${endpoint}?id=${id}`, {
-          method: "PATCH",
+
+        const json = await apiClient<T>(endpoint, {
+          method: "POST",
           body: JSON.stringify(body),
         });
 
+        setData(json);
         return json;
       } finally {
         setLoading(false);
@@ -21,5 +24,5 @@ export function usePatch<T, B = any>(endpoint: string) {
     [endpoint],
   );
 
-  return { patch, loading };
+  return { post, loading };
 }

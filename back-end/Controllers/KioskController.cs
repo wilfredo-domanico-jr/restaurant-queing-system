@@ -11,13 +11,28 @@ namespace back_end.Controllers
 
     public class KioskController : ControllerBase
     {
-        private readonly IKioskService _queueService;
+        private readonly IKioskService _kioskService;
         private readonly ILogger<KioskController> _logger;
 
-        public KioskController(IKioskService queueService, ILogger<KioskController> logger)
+        public KioskController(IKioskService kioskService, ILogger<KioskController> logger)
         {
-            _queueService = queueService;
+            _kioskService = kioskService;
             _logger = logger;
+        }
+
+
+        [EnableRateLimiting("kiosk-read")]
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var result = await _kioskService.GetStatsAsync();
+
+
+            return Ok(new
+            {
+                message = "Kiosk Stats fetch successfully",
+                data = result
+            });
         }
 
 
@@ -25,7 +40,7 @@ namespace back_end.Controllers
         [HttpPost("create-ticket")]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto ticket)
         {
-            var result = await _queueService.CreateTicketAsync(ticket);
+            var result = await _kioskService.CreateTicketAsync(ticket);
 
 
             return Ok(new

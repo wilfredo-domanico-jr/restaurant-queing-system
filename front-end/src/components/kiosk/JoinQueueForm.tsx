@@ -4,7 +4,7 @@ type JoinQueueFormProps = {
   name: string;
   partySize: number | null;
   section: string | null;
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  setName: (value: string) => void;
   handleCreate: () => void;
   loading: boolean;
 };

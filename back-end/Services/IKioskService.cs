@@ -94,5 +94,61 @@ namespace back_end.Services
                 EstimatedWaitMinutes = (int)Math.Round(averageWaitMinutes)
             };
         }
+
+        public async Task<StatsResponseDto> GetStatsAsync()
+        {
+
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
+
+
+            // ============ START WAITING COUNT ================= //
+            int waiting = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Waiting" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow)
+            .CountAsync();
+            // ============ END WAITING COUNT ================= //
+
+
+            // ============ START SERVING COUNT ================= //
+            int serving = await _context.QueueTickets
+            .Where(t =>
+                t.Status == "Called" &&
+                t.JoinedAt >= today &&
+                t.JoinedAt < tomorrow &&
+                t.CalledAt != null)
+            .CountAsync();
+            // ============ END SERVING COUNT ================= //
+
+            // ============ START AVERAGE WAITITNG TIME COUNT ================= //
+
+            var seatedTickets = await _context.QueueTickets
+                .Where(t =>
+                    t.Status == "Seated" &&
+                    t.JoinedAt >= today &&
+                    t.JoinedAt < tomorrow &&
+                    t.SeatedAt != null)
+                .ToListAsync();
+
+            double averageWaitingTime = 0;
+
+            if (seatedTickets.Any())
+            {
+                averageWaitingTime = seatedTickets
+                    .Average(t => (t.SeatedAt!.Value - t.JoinedAt).TotalMinutes);
+            }
+
+            // ============ END AVERAGE WAITITNG TIME COUNT ================= //
+
+
+            return new StatsResponseDto
+            {
+                NowServing = serving,
+                Waiting = waiting,
+                EstimatedWaitMinutes = (int)Math.Round(averageWaitingTime)
+            };
+        }
     }
 }

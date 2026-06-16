@@ -1,4 +1,4 @@
-# 🍽️ Restaurant Queing System (Under Development)
+# 🍽️ Restaurant Queing System
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18-blue)](https://react.dev/)
@@ -43,7 +43,7 @@ The system provides a fast, responsive, and scalable solution for managing resta
 - 🪑 Party size selection
 - 🍽 Seating preference (Indoor / Outdoor / Bar / VIP)
 - 📊 Live queue tracking
-- 📣 Call next / manage queue
+- 📣 Manage queue
 - ⏱ Estimated wait time
 - 📱 Responsive design for tablets & kiosks
 
