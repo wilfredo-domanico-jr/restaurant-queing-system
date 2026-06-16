@@ -77,8 +77,8 @@ dotnet run
 ### 🌐 Default API URLs
 
 ```
-https://localhost:5001
-http://localhost:5000
+http://localhost:5272
+https://localhost:7046
 ```
 
 ---
@@ -111,18 +111,6 @@ http://localhost:3000
 
 ---
 
-## 🔗 API Endpoints (Example)
-
-| Method | Endpoint               | Description         |
-| ------ | ---------------------- | ------------------- |
-| GET    | `/api/queue`           | Get queue list      |
-| POST   | `/api/queue`           | Add guest           |
-| PUT    | `/api/queue/call-next` | Call next guest     |
-| PUT    | `/api/queue/{id}`      | Update guest status |
-| DELETE | `/api/queue/{id}`      | Remove guest        |
-
----
-
 ## 🧠 Tech Stack
 
 ### Frontend
@@ -131,14 +119,13 @@ http://localhost:3000
 - React
 - TypeScript
 - Tailwind CSS
-- Axios
 
 ### Backend
 
 - ASP.NET Core Web API
 - C#
 - Entity Framework Core
-- SQL Server (or PostgreSQL)
+- SQL Server
 
 ---
 
