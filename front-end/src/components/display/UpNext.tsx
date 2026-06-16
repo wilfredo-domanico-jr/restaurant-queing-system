@@ -37,7 +37,7 @@ export default function UpNext() {
           items.map((g) => (
             <div
               key={g.ticketNumber}
-              className="bg-white/5 border border-white/10 rounded-[14px] p-3 sm:p-4"
+              className="bg-white/5 border border-white/10 max-h-40 rounded-[14px] p-3 sm:p-4"
             >
               {/* TICKET */}
               <div className="font-serif text-xl sm:text-2xl text-white leading-none">

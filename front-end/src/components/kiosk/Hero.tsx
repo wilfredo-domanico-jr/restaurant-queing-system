@@ -1,6 +1,21 @@
 "use client";
-
+import { useState, useEffect } from "react";
+import { useFetch } from "@/src/hooks/useFetch";
+import { KioskTaskResponse } from "@/src/types/kiosk.types";
 export default function Hero() {
+  const [stats, setStats] = useState<KioskTaskResponse | null>(null);
+
+  const { load: loadStats } = useFetch<KioskTaskResponse>("/kiosk/stats");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await loadStats();
+      setStats(result);
+    };
+
+    fetchData();
+  }, [loadStats]);
+
   return (
     <>
       {/* HERO */}
@@ -26,19 +41,30 @@ export default function Hero() {
       <div className="bg-brand-dark px-3 sm:px-6 py-3">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-8 text-center">
           <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-            Now serving: <span className="font-semibold">—</span>
+            Now serving:{" "}
+            <span className="font-semibold">
+              {stats?.data.nowServing ?? " — "}
+            </span>
           </div>
 
           <div className="hidden sm:block w-px h-3 bg-white/40"></div>
 
           <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-            Waiting: <span className="font-semibold">0</span>
+            Waiting:{" "}
+            <span className="font-semibold">{stats?.data.waiting ?? 0}</span>
           </div>
 
           <div className="hidden sm:block w-px h-3 bg-white/40"></div>
 
           <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-            Est. wait: <span className="font-semibold">—</span>
+            Est. wait:{" "}
+            <span className="font-semibold">
+              {stats?.data.estimatedWaitMinutes != null
+                ? `${stats.data.estimatedWaitMinutes} ${
+                    stats.data.estimatedWaitMinutes === 1 ? "minute" : "minutes"
+                  }`
+                : "—"}
+            </span>
           </div>
         </div>
       </div>

@@ -1,3 +1,16 @@
+// Response Item
+export interface KioskTaskItem {
+  nowServing: number;
+  waiting: number;
+  estimatedWaitMinutes: number;
+}
+
+// Response
+export interface KioskTaskResponse {
+  message: string;
+  data: KioskTaskItem;
+}
+
 // Request
 export interface CreateTicketRequest {
   partySize: number;
