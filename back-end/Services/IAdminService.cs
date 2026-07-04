@@ -1,7 +1,9 @@
 ﻿using back_end.Data;
 using back_end.DTO.Admin;
+using back_end.Hubs;
 using back_end.Models;
 using back_end.DTO.Common;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
@@ -9,10 +11,12 @@ namespace back_end.Services
     public class AdminService : IAdminService
     {
         private readonly AppDbContext _context;
+        private readonly IHubContext<QueueHub> _hub;
 
-        public AdminService(AppDbContext context)
+        public AdminService(AppDbContext context, IHubContext<QueueHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         public async Task<TodayStatsResponseDto> GetTodayStatsAsync()
@@ -164,6 +168,8 @@ namespace back_end.Services
 
             await _context.SaveChangesAsync();
 
+            await _hub.Clients.All.SendAsync("queueUpdated");
+
             return true;
 
         }
@@ -211,6 +217,8 @@ namespace back_end.Services
             _context.ActivityLogs.Add(log);
 
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.All.SendAsync("queueUpdated");
 
             return true;
         }

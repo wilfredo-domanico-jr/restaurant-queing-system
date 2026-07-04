@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
 import { useDelete } from "@/src/hooks/useDelete";
 import { usePatch } from "@/src/hooks/usePatch";
+import { useQueueUpdates } from "@/src/hooks/useQueueUpdates";
 import type { CurrentQueueResponse } from "@/src/types/admin.types";
 import CurrentQueueTable from "./CurrentQueueTable";
 
@@ -32,14 +33,17 @@ export default function CurrentQueue({
   const { remove: deleteQueue } = useDelete("/admin/delete-queue");
   const { patch: updateStatus } = usePatch("/admin/update-queue-status");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await loadCurrentQueue();
-      setCurrentQueue(result);
-    };
+  const fetchData = useCallback(async () => {
+    const result = await loadCurrentQueue();
+    setCurrentQueue(result);
+  }, [loadCurrentQueue]);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
-  }, [loadCurrentQueue, page]);
+  }, [fetchData, page]);
+
+  useQueueUpdates(fetchData);
 
   const queueData = currentQueue?.data.items ?? [];
   const totalPages = currentQueue?.data.totalPages ?? 1;

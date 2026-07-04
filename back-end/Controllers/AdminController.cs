@@ -1,6 +1,7 @@
 
 using back_end.Services;
 using back_end.DTO.Admin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -8,6 +9,7 @@ namespace back_end.Controllers
 {
     [ApiController]
     [Route("api/admin")]
+    [Authorize(Roles = "Admin")]
 
     public class AdminController : ControllerBase
     {
@@ -91,6 +93,7 @@ namespace back_end.Controllers
         }
 
 
+        [EnableRateLimiting("admin-read")]
         [HttpGet("sections-status")]
         public async Task<IActionResult> GetSectionStatus()
         {

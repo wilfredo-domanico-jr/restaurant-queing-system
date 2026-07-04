@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
+import { useQueueUpdates } from "@/src/hooks/useQueueUpdates";
 import type { UpNextResponse } from "@/src/types/display.types";
 
 export default function UpNext() {
@@ -9,18 +10,17 @@ export default function UpNext() {
 
   const { load: loadUpNext } = useFetch<UpNextResponse>("/display/up-next");
 
-  useEffect(() => {
-    loadUpNext();
+  const fetchData = useCallback(async () => {
+    const result = await loadUpNext();
+    setUpNext(result);
   }, [loadUpNext]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await loadUpNext();
-      setUpNext(result);
-    };
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
-  }, [loadUpNext]);
+  }, [fetchData]);
+
+  useQueueUpdates(fetchData);
 
   const items = upNext?.data ?? [];
 

@@ -1,8 +1,12 @@
-﻿using back_end.Data;
+﻿using System.Text;
+using back_end.Data;
+using back_end.Hubs;
 using back_end.Middlewares;
 using back_end.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +22,28 @@ builder.Services.AddScoped<IKioskService, KioskService>();
 builder.Services.AddScoped<IDisplayService, DisplayService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 
+// SignalR (live queue updates)
+builder.Services.AddSignalR();
+
+// JWT auth (Admin dashboard)
+var jwtSecret = builder.Configuration["Jwt:Secret"];
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret ?? string.Empty)),
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,8 +58,12 @@ builder.Services.AddCors(options =>
     {
         policy
             .WithOrigins(allowedOrigins!)
+            // AllowAnyHeader rather than an explicit allow-list: the SignalR
+            // client sends its own negotiation headers (X-Requested-With,
+            // X-SignalR-User-Agent, ...) that would otherwise need to be
+            // tracked here one by one. Origins and methods stay restricted.
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .WithMethods("GET", "POST", "PATCH", "DELETE");
     });
 });
 
@@ -84,21 +114,54 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
+// Apply pending EF Core migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 // Swagger (dev only)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseHsts();
+}
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { message = "An unexpected error occurred." });
+    });
+});
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    await next();
+});
 
 app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 
-app.UseRateLimiter();
+// API key check happens before rate limiting so unauthenticated requests
+// don't consume the shared rate-limit budget.
 app.UseMiddleware<ApiKeyMiddleware>();
+app.UseRateLimiter();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<QueueHub>("/hubs/queue");
 
 app.Run();

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
+import { useQueueUpdates } from "@/src/hooks/useQueueUpdates";
 
 import type {
   TodayStatsResponse,
@@ -60,6 +61,9 @@ export default function Admin() {
     setSections(sectionsRes);
     setRecentActivity(activityRes);
   };
+
+  useQueueUpdates(refreshTodayStats);
+
   const stats = todayStats?.data;
   const sectionsData = sections?.data ?? {
     indoor: 0,

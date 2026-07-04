@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
+import { useQueueUpdates } from "@/src/hooks/useQueueUpdates";
 import type { NowServingResponse } from "@/src/types/display.types";
 
 export default function NowServing() {
@@ -11,14 +12,17 @@ export default function NowServing() {
     "/display/now-serving",
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await loadNowServing();
-      setNowServing(result);
-    };
-
-    fetchData();
+  const fetchData = useCallback(async () => {
+    const result = await loadNowServing();
+    setNowServing(result);
   }, [loadNowServing]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchData();
+  }, [fetchData]);
+
+  useQueueUpdates(fetchData);
 
   const data = nowServing?.data;
 

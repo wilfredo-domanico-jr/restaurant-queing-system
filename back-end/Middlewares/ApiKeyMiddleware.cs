@@ -1,4 +1,7 @@
-﻿namespace back_end.Middlewares
+﻿using System.Security.Cryptography;
+using System.Text;
+
+namespace back_end.Middlewares
 {
     public class ApiKeyMiddleware
     {
@@ -12,6 +15,18 @@
 
         public async Task Invoke(HttpContext context, IConfiguration config)
         {
+            var path = context.Request.Path;
+
+            // Admin/Auth routes are protected by JWT bearer auth instead of the shared key.
+            var requiresApiKey = path.StartsWithSegments("/api/kiosk") ||
+                                  path.StartsWithSegments("/api/display");
+
+            if (!requiresApiKey)
+            {
+                await _next(context);
+                return;
+            }
+
             if (!context.Request.Headers.TryGetValue(HEADER_NAME, out var extractedKey))
             {
                 context.Response.StatusCode = 401;
@@ -21,8 +36,7 @@
 
             var apiKey = config.GetValue<string>("ApiKey");
 
-            if (string.IsNullOrEmpty(apiKey) ||
-                !string.Equals(apiKey, extractedKey, StringComparison.Ordinal))
+            if (string.IsNullOrEmpty(apiKey) || !FixedTimeEquals(apiKey, extractedKey!))
             {
                 context.Response.StatusCode = 403;
                 await context.Response.WriteAsync("Invalid API Key");
@@ -30,6 +44,17 @@
             }
 
             await _next(context);
+        }
+
+        private static bool FixedTimeEquals(string expected, string actual)
+        {
+            var expectedBytes = Encoding.UTF8.GetBytes(expected);
+            var actualBytes = Encoding.UTF8.GetBytes(actual);
+
+            if (expectedBytes.Length != actualBytes.Length)
+                return false;
+
+            return CryptographicOperations.FixedTimeEquals(expectedBytes, actualBytes);
         }
     }
 }

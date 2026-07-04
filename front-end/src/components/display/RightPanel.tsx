@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFetch } from "@/src/hooks/useFetch";
+import { useQueueUpdates } from "@/src/hooks/useQueueUpdates";
 import type {
   TodayStatsResponse,
   SectionStatusResponse,
@@ -21,21 +22,24 @@ export default function RightPanel() {
     "/display/sections-status",
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const resultStats = await loadTodayStats();
-      const resultSectionStatus = await loadSectionStatus();
-      setStats(resultStats);
-      setSectionStatus(resultSectionStatus);
-    };
-
-    fetchData();
+  const fetchData = useCallback(async () => {
+    const resultStats = await loadTodayStats();
+    const resultSectionStatus = await loadSectionStatus();
+    setStats(resultStats);
+    setSectionStatus(resultSectionStatus);
   }, [loadTodayStats, loadSectionStatus]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchData();
+  }, [fetchData]);
+
+  useQueueUpdates(fetchData);
 
   return (
     <div className="hidden md:flex bg-white/[0.03] border-l border-white/10 p-6 flex-col gap-5 overflow-y-auto">
       <div className="text-[10px] font-semibold tracking-[2.5px] uppercase text-white/30 pb-2 border-b border-white/10">
-        Today's Stats
+        Today&apos;s Stats
       </div>
 
       <div>

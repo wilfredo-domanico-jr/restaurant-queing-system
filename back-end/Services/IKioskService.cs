@@ -1,6 +1,8 @@
 ﻿using back_end.Data;
 using back_end.DTO.Kiosk;
+using back_end.Hubs;
 using back_end.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
@@ -8,10 +10,12 @@ namespace back_end.Services
     public class KioskService : IKioskService
     {
         private readonly AppDbContext _context;
+        private readonly IHubContext<QueueHub> _hub;
 
-        public KioskService(AppDbContext context)
+        public KioskService(AppDbContext context, IHubContext<QueueHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         public async Task<CreateTicketResponseDto> CreateTicketAsync(CreateTicketDto order)
@@ -21,7 +25,7 @@ namespace back_end.Services
             var ticket = new QueueTickets
             {
                 PartySize = order.PartySize,
-                Section = order.Section,
+                Section = order.Section.ToString(),
                 GuestName = order.GuestName,
                 JoinedAt = DateTime.Now,
                 Status = "Waiting",
@@ -47,6 +51,8 @@ namespace back_end.Services
             // ============ END ACTIVITY LOGS ================= //
 
             await _context.SaveChangesAsync(); // Save here
+
+            await _hub.Clients.All.SendAsync("queueUpdated");
 
             var today = DateTime.Today;
 

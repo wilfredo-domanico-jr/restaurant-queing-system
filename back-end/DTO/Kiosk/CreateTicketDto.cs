@@ -8,8 +8,7 @@ namespace back_end.DTO.Kiosk
         public int PartySize { get; set; }
 
         [Required]
-        [MaxLength(10)]
-        public required string Section { get; set; }
+        public required SectionType Section { get; set; }
 
         [Required]
         [MaxLength(100)]
