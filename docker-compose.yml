@@ -42,6 +42,11 @@ services:
         NEXT_PUBLIC_DEMO_MODE: ${DEMO_MODE:-false}
         NEXT_PUBLIC_DEMO_ADMIN_USERNAME: ${ADMIN_USERNAME}
         NEXT_PUBLIC_DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD}
+    environment:
+      # Used only by server-side route handlers (login/admin proxy), which
+      # run inside this container and must reach "backend" by service name
+      # rather than "localhost" (that's what the browser uses instead).
+      API_INTERNAL_URL: "http://backend:8080/api"
     ports:
       - "3000:3000"
     depends_on:
