@@ -30,6 +30,8 @@ npm run lint      # eslint
 ```
 Needs a `.env.local` with `NEXT_PUBLIC_API_URL` (e.g. `http://localhost:5272/api`) and `NEXT_PUBLIC_API_KEY` matching the backend's `ApiKey`. No test runner is configured.
 
+Set `NEXT_PUBLIC_DEMO_MODE=true` plus `NEXT_PUBLIC_DEMO_ADMIN_USERNAME`/`NEXT_PUBLIC_DEMO_ADMIN_PASSWORD` (see `front-end/.env.example`) to show a "Continue as Demo Admin" button on `/admin/login` — useful for a portfolio deployment where visitors shouldn't need real credentials. Leave it unset/`false` for a normal deployment.
+
 ### Docker
 ```bash
 cp .env.example .env   # fill in SA_PASSWORD, API_KEY, JWT_SECRET, ADMIN_USERNAME, ADMIN_PASSWORD_HASH

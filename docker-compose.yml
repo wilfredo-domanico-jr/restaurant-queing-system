@@ -39,6 +39,9 @@ services:
       args:
         NEXT_PUBLIC_API_URL: "http://localhost:5272/api"
         NEXT_PUBLIC_API_KEY: ${API_KEY}
+        NEXT_PUBLIC_DEMO_MODE: ${DEMO_MODE:-false}
+        NEXT_PUBLIC_DEMO_ADMIN_USERNAME: ${ADMIN_USERNAME}
+        NEXT_PUBLIC_DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD}
     ports:
       - "3000:3000"
     depends_on:
