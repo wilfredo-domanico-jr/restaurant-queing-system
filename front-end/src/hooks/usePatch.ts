@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { apiClient } from "@/src/lib/apiClient";
 
-export function usePatch<T, B = any>(endpoint: string) {
+export function usePatch<T, B = unknown>(endpoint: string) {
   const [loading, setLoading] = useState(false);
 
   const patch = useCallback(

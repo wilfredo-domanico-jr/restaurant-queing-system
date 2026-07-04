@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
 import { apiClient } from "@/src/lib/apiClient";
 
-export function usePost<T, B = any>(endpoint: string) {
-  const [data, setData] = useState<T | null>(null);
+export function usePost<T, B = unknown>(endpoint: string) {
   const [loading, setLoading] = useState(false);
 
   const post = useCallback(
@@ -15,7 +14,6 @@ export function usePost<T, B = any>(endpoint: string) {
           body: JSON.stringify(body),
         });
 
-        setData(json);
         return json;
       } finally {
         setLoading(false);

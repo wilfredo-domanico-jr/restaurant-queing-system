@@ -33,7 +33,7 @@ export default function Hero() {
 
         {/* Subtitle */}
         <p className="text-white/75 mt-3 sm:mt-4 text-sm sm:text-base font-light max-w-md mx-auto">
-          Get a ticket and we'll call you when your table is ready.
+          Get a ticket and we&apos;ll call you when your table is ready.
         </p>
       </div>
 

@@ -77,7 +77,7 @@ export default function TicketModal({
             onClick={onClose}
             className="w-full mt-6 bg-brand text-white py-3 rounded-xl font-semibold hover:bg-brand-dark transition cursor-pointer"
           >
-            Got it, I'll wait!
+            Got it, I&apos;ll wait!
           </button>
         </div>
       </div>

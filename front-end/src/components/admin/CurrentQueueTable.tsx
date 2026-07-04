@@ -3,8 +3,8 @@ import type { CurrentQueueItem } from "@/src/types/admin.types";
 type CurrentQueueProps = {
   showToast: (message: string) => void;
   queueData: CurrentQueueItem[];
-  onDelete: (id: number) => Promise<any>;
-  onUpdate: (id: number, status: string) => Promise<any>;
+  onDelete: (id: number) => Promise<unknown>;
+  onUpdate: (id: number, status: string) => Promise<unknown>;
   deletingId: number | null;
 };
 
