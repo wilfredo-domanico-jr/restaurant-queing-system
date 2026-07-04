@@ -1,1 +1,5 @@
 .env
+
+# back-end.Tests build output
+back-end.Tests/bin/
+back-end.Tests/obj/
