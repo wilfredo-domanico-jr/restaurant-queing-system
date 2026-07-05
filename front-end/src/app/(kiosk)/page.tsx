@@ -83,7 +83,7 @@ export default function Kiosk() {
             loading={loading}
           />
 
-          <p className="text-xs text-text-muted text-center mt-[-1rem]">
+          <p className="text-xs text-text-muted text-center mt-4">
             By joining, you agree to our table allocation policy.
           </p>
         </div>
