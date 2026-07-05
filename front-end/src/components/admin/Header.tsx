@@ -1,12 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { usePost } from "@/src/hooks/usePost";
 
 export default function Header() {
   const router = useRouter();
+  const { post: logout } = usePost<{ message: string }>("/auth/logout");
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await logout();
     router.push("/admin/login");
     router.refresh();
   };

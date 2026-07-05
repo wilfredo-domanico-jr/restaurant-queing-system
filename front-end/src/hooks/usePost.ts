@@ -5,13 +5,13 @@ export function usePost<T, B = unknown>(endpoint: string) {
   const [loading, setLoading] = useState(false);
 
   const post = useCallback(
-    async (body: B) => {
+    async (body?: B) => {
       try {
         setLoading(true);
 
         const json = await apiClient<T>(endpoint, {
           method: "POST",
-          body: JSON.stringify(body),
+          body: body !== undefined ? JSON.stringify(body) : undefined,
         });
 
         return json;

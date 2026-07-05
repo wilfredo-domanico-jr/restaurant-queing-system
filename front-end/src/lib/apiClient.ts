@@ -5,19 +5,21 @@ export async function apiClient<T>(
   options: RequestInit = {},
 ): Promise<T> {
   // Admin calls go through the local Next.js proxy, which attaches the
-  // logged-in admin's JWT server-side — the browser never sees it.
-  const isAdmin = endpoint.startsWith("/admin");
-  const url = isAdmin ? `/api${endpoint}` : `${API_URL}${endpoint}`;
+  // logged-in admin's JWT server-side — the browser never sees it. Auth
+  // calls (login/logout) also stay local since they set/clear the
+  // httpOnly admin_token cookie themselves.
+  const isLocal = endpoint.startsWith("/admin") || endpoint.startsWith("/auth");
+  const url = isLocal ? `/api${endpoint}` : `${API_URL}${endpoint}`;
 
   const res = await fetch(url, {
     method: options.method || "GET",
     headers: {
       "Content-Type": "application/json",
-      ...(isAdmin ? {} : { "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "" }),
+      ...(isLocal ? {} : { "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "" }),
       ...(options.headers || {}),
     },
     body: options.body ? options.body : undefined,
-    credentials: isAdmin ? "include" : "same-origin",
+    credentials: isLocal ? "include" : "same-origin",
   });
 
   if (!res.ok) {

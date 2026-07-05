@@ -21,7 +21,9 @@ export function useQueueUpdates(onUpdate: () => void) {
 
     connection.on("queueUpdated", () => onUpdateRef.current());
 
-    connection.start().catch((err) => console.error("SignalR connection failed", err));
+    connection
+      .start()
+      .catch((err) => console.error("SignalR connection failed", err));
 
     return () => {
       connection.stop();

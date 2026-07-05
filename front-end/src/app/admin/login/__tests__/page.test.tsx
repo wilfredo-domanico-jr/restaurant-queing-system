@@ -29,7 +29,10 @@ describe("AdminLogin page", () => {
     vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "true");
     vi.stubEnv("NEXT_PUBLIC_DEMO_ADMIN_USERNAME", "admin");
     vi.stubEnv("NEXT_PUBLIC_DEMO_ADMIN_PASSWORD", "demo-pass");
-    vi.mocked(fetch).mockResolvedValue({ ok: true } as Response);
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    } as Response);
 
     const { default: AdminLogin } = await import("../page");
     render(<AdminLogin />);
@@ -49,7 +52,10 @@ describe("AdminLogin page", () => {
 
   it("submits typed credentials via the regular form", async () => {
     vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "false");
-    vi.mocked(fetch).mockResolvedValue({ ok: true } as Response);
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    } as Response);
 
     const { default: AdminLogin } = await import("../page");
     const { container } = render(<AdminLogin />);
@@ -73,7 +79,10 @@ describe("AdminLogin page", () => {
 
   it("shows an error message when login fails", async () => {
     vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "false");
-    vi.mocked(fetch).mockResolvedValue({ ok: false } as Response);
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      text: async () => "Invalid credentials",
+    } as Response);
 
     const { default: AdminLogin } = await import("../page");
     const { container } = render(<AdminLogin />);

@@ -10,7 +10,7 @@ export function usePatch<T, B = unknown>(endpoint: string) {
         setLoading(true);
         const json = await apiClient<T>(`${endpoint}?id=${id}`, {
           method: "PATCH",
-          body: JSON.stringify(body),
+          body: body !== undefined ? JSON.stringify(body) : undefined,
         });
 
         return json;

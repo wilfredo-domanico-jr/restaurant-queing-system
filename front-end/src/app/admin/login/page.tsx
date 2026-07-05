@@ -2,47 +2,41 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePost } from "@/src/hooks/usePost";
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 const DEMO_USERNAME = process.env.NEXT_PUBLIC_DEMO_ADMIN_USERNAME ?? "";
 const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD ?? "";
+
+type LoginBody = { username: string; password: string };
 
 export default function AdminLogin() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { post: login, loading } = usePost<{ message: string }, LoginBody>(
+    "/auth/login",
+  );
 
-  const login = async (loginUsername: string, loginPassword: string) => {
+  const handleLogin = async (loginUsername: string, loginPassword: string) => {
     setError("");
-    setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: loginUsername, password: loginPassword }),
-      });
-
-      if (!res.ok) {
-        setError("Invalid username or password");
-        return;
-      }
-
+      await login({ username: loginUsername, password: loginPassword });
       router.push("/admin");
       router.refresh();
-    } finally {
-      setLoading(false);
+    } catch {
+      setError("Invalid username or password");
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login(username, password);
+    handleLogin(username, password);
   };
 
-  const handleDemoLogin = () => login(DEMO_USERNAME, DEMO_PASSWORD);
+  const handleDemoLogin = () => handleLogin(DEMO_USERNAME, DEMO_PASSWORD);
 
   return (
     <div className="min-h-[calc(100vh-72px)] flex items-center justify-center bg-[#F9F5F1] px-4">
